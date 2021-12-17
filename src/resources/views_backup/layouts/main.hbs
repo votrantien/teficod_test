@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vn">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" type="text/css" href="/font-awesome/css/all.css" />
+    <link rel="stylesheet" type="text/css" href="/css/daterangepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/teficod_font.css" />
+    <link rel="stylesheet" type="text/css" href="/css/local.css" />
+
+    <script type="text/javascript" src="/vendor/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/vendor/moment.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/vendor/validate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.js"></script>
+    <script type="text/javascript" src="/vendor/FileSaver.min.js"></script>
+    <script type="text/javascript" src="/vendor/exceljs/dist/exceljs.min.js"></script>
+
+    <!-- you need to include the shieldui css and js assets in order for the charts to work -->
+    <link rel="stylesheet" type="text/css" href="/vendor/light_bootstrap/all.min.css" />
+    <link id="gridcss" rel="stylesheet" type="text/css" href="/vendor/dark_boostrap/all.min.css" />
+
+    {{!-- <script type="text/javascript" src="/vendor/shieldui-all.min.js"></script> --}}
+    <script type="text/javascript" src="/vendor/gridData.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/export2excel.js"></script>
+</head>
+
+<body>
+    <div class="popup-container">
+        {{!-- notification success popup --}}
+        <div class="alert alert-success" id="success-alert" style="display: none;">
+            <button type="button" class="close fas fa-times" data-dismiss="alert"></button>
+            <p id="success-content">thành công</p>
+        </div>
+
+        {{!-- notification failure popup --}}
+        <div class="alert alert-danger" id="failure-alert" style="display: none;">
+            <button type="button" class="close fas fa-times" data-dismiss="alert"></button>
+            <p id="failure-content">ko Thành công</p>
+        </div>
+    </div>
+    {{>header}}
+
+    {{#if username}}
+    {{>nav-bar}}
+    {{/if}}
+
+    {{{body}}}
+    {{!--
+    <script type="text/javascript" src="/js/main.js"></script> --}}
+
+    {{>footer}}
+
+    <div class="modal" tabindex="-1" role="dialog" id="noticeModal">
+        <div class="modal-dialog radius-none" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="noticeModalSubmit" submit-type="none">Gửi</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="noticeModalCancel">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mask" style="display: none;">
+        <div id="loader"></div>
+    </div>
+</body>
+
+</html>

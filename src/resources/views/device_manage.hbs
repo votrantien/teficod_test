@@ -1,0 +1,515 @@
+<div class="container-scroller">
+  <!-- partial:../../partials/_sidebar.html -->
+  {{>_sidebar}}
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:../../partials/_navbar.html -->
+    {{>_navbar}}
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Danh sách thiết bị</h4>
+                {{!-- <button type="button" class="btn btn-primary btn-icon-text">
+                  <i class="mdi mdi-library-plus btn-icon-prepend"></i> Thêm mới </button> --}}
+                <div class="table-responsive">
+                  <table class="table table-hover table-contextual" id="listDevicetable">
+                    <thead>
+                      <tr>
+                        <th>Công cụ</th>
+                        <th>Serial</th>
+                        <th>Tên</th>
+                        <th>Farm</th>
+                        <th>Loại</th>
+                        <th>Số FW</th>
+                        <th>Số HW</th>
+                        <th>Ngày SX</th>
+                        <th>Quốc gia</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {{#each devices as |device|}}
+                      {{#if_ device.device_model "in" "AHSD,BSGW,"}}
+                      <tr class="device-row" id="dev{{device._id}}" data-_id="{{device._id}}"
+                        data-serial="{{device.sn_number}}" data-model="{{device.device_model}}"
+                        data-group="{{device.group._id}}" data-fw="{{device.fw_number}}" data-hw="{{device.hw_number}}"
+                        data-country="{{device.country}}" data-mfg-date="{{device.mfg_date}}"
+                        data-name="{{device.device_name}}" data-desc="{{device.description}}"
+                        data-type-id="{{device.device_type._id}}">
+                        <td class="device-manage-tools">
+
+                          {{#if_ ../user.role "==" "admin"}}
+                          <button class="btn btn-sm p-1 mdi mdi mdi-check mdi-18px active-device"
+                            data-id-row="#dev{{device._id}}" title="Active thiết bị"
+                            data-model="{{device.device_model}}"></button>
+                          <button class="btn btn-sm p-1 mdi mdi mdi mdi-close mdi-18px deactive-device"
+                            data-id-row="#dev{{device._id}}" title="De-Active thiết bị"
+                            data-model="{{device.device_model}}"></button>
+                          {{/if_}}
+
+                          <button class="btn btn-sm p-1 mdi mdi-wrench mdi-18px edit-device-info"
+                            data-id-row="#dev{{device._id}}" title="Sửa thông tin"></button>
+                          <button class="btn btn-sm p-1 mdi mdi-information-outline mdi-18px show-device-desc"
+                            title="Mô tả thiết bị" data-id-row="#dev{{device._id}}"></button>
+                          {{#if_ device.device_model "==" "BSGW"}}
+                          <button class="btn btn-sm p-1 mdi mdi-arrow-down-drop-circle-outline mdi-18px view-node-btn"
+                            value="{{device.sn_number}}" title="Danh sách node" data-toggle="collapse"
+                            data-target=".list-node-{{device._id}}" aria-expanded="false"
+                            aria-controls="list-node-{{device._id}}"></button>
+                          {{/if_}}
+                        </td>
+                        <td class="device-serial">{{device.sn_number}}</td>
+                        <td class="device-name">{{device.device_name}}</td>
+                        <td class="device-group">{{device.group.group_name}}</td>
+                        <td class="device-type">{{device.device_type.device_type}}</td>
+                        <td class="device-fw">{{device.fw_number}}</td>
+                        <td class="device-hw">{{device.hw_number}}</td>
+                        <td class="device-mfg-date">{{device.mfg_date}}</td>
+                        <td class="device-country">{{device.country}}</td>
+                      </tr>
+                      {{#if_ device.device_model "==" "BSGW"}}
+                      {{#each ../devices as |node|}}
+                      {{#if_ node.gateway "==" device.sn_number}}
+                      <tr class="collapse table-primary node-row list-node-{{device._id}}" id="dev{{node._id}}"
+                        data-_id="{{node._id}}" data-serial="{{node.sn_number}}" data-model="{{node.device_model}}"
+                        data-group="{{node.group._id}}" data-fw="{{node.fw_number}}" data-hw="{{node.hw_number}}"
+                        data-country="{{node.country}}" data-mfg-date="{{node.mfg_date}}"
+                        data-name="{{node.device_name}}" data-desc="{{node.description}}"
+                        data-type-id="{{node.device_type._id}}">
+                        <td class="device-manage-tools">
+
+                          {{#if_ ../user.role "==" "admin"}}
+                          <button class="btn btn-sm p-1 mdi mdi mdi-check mdi-18px active-device"
+                            data-id-row="#dev{{node._id}}" title="Active thiết bị"
+                            data-model="{{node.device_model}}"></button>
+                          <button class="btn btn-sm p-1 mdi mdi mdi mdi-close mdi-18px deactive-device"
+                            data-id-row="#dev{{node._id}}" title="De-Active thiết bị"
+                            data-model="{{node.device_model}}"></button>
+                          {{/if_}}
+
+                          <button class="btn btn-sm p-1 mdi mdi-wrench mdi-18px edit-device-info" title="Sửa thông tin"
+                            data-id-row="#dev{{node._id}}"></button>
+                          <button class="btn btn-sm p-1 mdi mdi-information-outline mdi-18px show-device-desc"
+                            title="Mô tả thiết bị" data-id-row="#dev{{node._id}}"></button>
+                        </td>
+                        <td class="device-serial">(Node) {{node.sn_number}}</td>
+                        <td class="device-name">{{node.device_name}}</td>
+                        <td class="device-group">{{node.group.group_name}}</td>
+                        <td class="device-type">{{node.device_type.device_type}}</td>
+                        <td class="device-fw">{{node.fw_number}}</td>
+                        <td class="device-hw">{{node.hw_number}}</td>
+                        <td class="device-mfg-date">{{node.mfg_date}}</td>
+                        <td class="device-country">{{node.country}}</td>
+                      </tr>
+                      {{/if_}}
+                      {{/each}}
+                      {{/if_}}
+                      {{else}}
+                      {{!-- node have'nt gateway area --}}
+                      {{#unless device.gateway}}
+                      <tr class="device-row" id="dev{{device._id}}" data-_id="{{device._id}}"
+                        data-serial="{{device.sn_number}}" data-model="{{device.device_model}}"
+                        data-group="{{device.group._id}}" data-fw="{{device.fw_number}}" data-hw="{{device.hw_number}}"
+                        data-country="{{device.country}}" data-mfg-date="{{device.mfg_date}}"
+                        data-name="{{device.device_name}}" data-desc="{{device.description}}"
+                        data-type-id="{{device.device_type._id}}">
+                        <td class="device-manage-tools">
+                          
+                          {{#if_ ../user.role "==" "admin"}}
+                          <button class="btn btn-sm p-1 mdi mdi mdi-check mdi-18px active-device"
+                            data-id-row="#dev{{device._id}}" title="Active thiết bị"
+                            data-model="{{device.device_model}}"></button>
+                          <button class="btn btn-sm p-1 mdi mdi mdi mdi-close mdi-18px deactive-device"
+                            data-id-row="#dev{{device._id}}" title="De-Active thiết bị"
+                            data-model="{{device.device_model}}"></button>
+                          {{/if_}}
+
+                          <button class="btn btn-sm p-1 mdi mdi-wrench mdi-18px edit-device-info"
+                            data-id-row="#dev{{device._id}}" title="Sửa thông tin"></button>
+                          <button class="btn btn-sm p-1 mdi mdi-information-outline mdi-18px show-device-desc"
+                            title="Mô tả thiết bị" data-id-row="#dev{{device._id}}"></button>
+                        </td>
+                        <td class="device-serial">{{device.sn_number}}</td>
+                        <td class="device-name">{{device.device_name}}</td>
+                        <td class="device-group">{{device.group.group_name}}</td>
+                        <td class="device-type">{{device.device_type.device_type}}</td>
+                        <td class="device-fw">{{device.fw_number}}</td>
+                        <td class="device-hw">{{device.hw_number}}</td>
+                        <td class="device-mfg-date">{{device.mfg_date}}</td>
+                        <td class="device-country">{{device.country}}</td>
+                      </tr>
+                      {{/unless}}
+                      {{/if_}}
+                      {{/each}}
+                    </tbody>
+                  </table>
+                </div>
+                <div id="paginationContainer">
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:../../partials/_footer.html -->
+      {{>_footer}}
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+</div>
+{{!-- modal edit device--}}
+<div class="modal" tabindex="-1" role="dialog" id="editModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body p-0">
+
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Sửa thông tin thiết bị</h4>
+            <form class="forms-sample">
+
+              <div class="form-group">
+                <label for="editInputDeviceName">Tên thiết bị</label>
+                <p class="text-danger err-msg" id="editInputDeviceNameErr"></p>
+                <input type="text" class="form-control" id="editInputDeviceName" placeholder="Tên thiết bị">
+              </div>
+              <div class="form-group">
+                <label for="editInputDeviceDesc">Mô tả</label>
+                <p class="text-danger err-msg" id="editInputDeviceDescErr"></p>
+                <input type="text" class="form-control" id="editInputDeviceDesc" placeholder="Mô tả thiết bị">
+              </div>
+
+              <button type="button" class="btn btn-primary mr-2" id="editSubmitBtn">Thay đổi</button>
+              <button type="button" class="btn btn-dark" data-dismiss="modal" id="editCancelBtn">Đóng</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- desc modal --}}
+<div class="modal" tabindex="-1" role="dialog" id="descModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body p-0">
+
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Mô tả thiết bị</h4>
+            <p id="descModalBody"></p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{{!-- active device modal --}}
+<div class="modal" tabindex="-1" role="dialog" id="activeDeviceModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body p-0">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Active thiết bị</h4>
+            <div class="form-group">
+              <label for="activeDeviceUserName">Nhập tên đăng nhập để tìm farm</label>
+              <input type="text" class="form-control" id="activeDeviceUserName" placeholder="Tên đăng nhập">
+            </div>
+            <div class="form-group">
+              <label for="activeDeviceGroup">Chọn farm active</label>
+              <p class="text-danger err-msg" id="activeDeviceGroupErr"></p>
+              <select class="form-control text-light" id="activeDeviceGroup">
+                <option value=""></option>
+                {{#groups}}
+                <option value="{{this._id}}" data-search-value="{{this.manage_user}}">{{this.group_name}}</option>
+                {{/groups}}
+              </select>
+            </div>
+
+            <button type="button" class="btn btn-primary mr-2" id="activeDeviceSubmitBtn">Active</button>
+            <button type="button" class="btn btn-dark" data-dismiss="modal" id="activeDeviceCancelBtn">Đóng</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{{!-- active node --}}
+
+<div class="modal" tabindex="-1" role="dialog" id="activeNodeModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body p-0">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Active node</h4>
+
+            <div class="form-group">
+              <label for="activeNodeGroup">Nhập serial gateway</label>
+              <p class="text-danger err-msg" id="activeNodeGateWayErr"></p>
+              <input class="form-control text-light" id="activeNodeGateWay" />
+            </div>
+
+            <button type="button" class="btn btn-primary mr-2" id="activeNodeSubmitBtn">Active</button>
+            <button type="button" class="btn btn-dark" data-dismiss="modal" id="activeNodeCancelBtn">Đóng</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{{#section 'script'}}
+
+{{/section}}
+<script>
+  $(document).ready(function () {
+    //pagination
+    $('#paginationContainer').RenderPaginationControl({
+      showItemQty: 5,
+      itemQty: CountItem('listDevicetable', 'device-row'),
+      idTable: 'listDevicetable',
+      trClass: 'device-row'
+    });
+
+    //change icon view node
+    $(document).on('click', '.view-node-btn', function () {
+      var expandStatus = $(this).attr('aria-expanded');
+      if (expandStatus == 'true') {
+        $(this)
+          .removeClass("mdi-arrow-down-drop-circle-outline")
+          .addClass("mdi-arrow-up-drop-circle-outline");
+      } else {
+        $(this)
+          .removeClass("mdi-arrow-up-drop-circle-outline")
+          .addClass("mdi-arrow-down-drop-circle-outline");
+      }
+    })
+
+    //Edit device
+    var editConstraints = {
+      editInputDeviceName: {
+        presence: { allowEmpty: false, message: 'Tên thiết bị không được để trống' },
+        length: { minimum: 5, maximum: 20, message: 'Tên thiết bị phải từ 5 đến 20 ký tự' },
+      }
+    };
+
+    $(document).on('click', '.edit-device-info', function () {
+      var idRow = $(this).data("idRow");
+      var deviceInfo = $(idRow).data();
+      $('#editInputDeviceName').val(deviceInfo.name);
+      $('#editInputDeviceDesc').val(deviceInfo.desc);
+      $('#editSubmitBtn').data(deviceInfo);
+      $('#editModal').modal('show');
+    })
+
+    $(document).on('click', '.show-device-desc', function () {
+      var idRow = $(this).data('idRow');
+      var desc = $(idRow).data("desc") || '...';
+      $('#descModalBody').html('');
+      $('#descModalBody').html(desc);
+      $('#descModal').modal('show');
+    })
+
+    $('#editSubmitBtn').on('click', function () {
+      var { mfgDate, country, hw, fw, group, serial, _id, model, typeId } = $(this).data();
+      var idRow = '#dev' + _id;
+      var deviceElem = $(idRow);
+      var deviceNameElem = $(idRow + ' .device-name');
+      var deviceDescElem = $(idRow + ' .show-device-desc');
+      var editInputDeviceName = $('#editInputDeviceName').val().trim();
+      var editInputDeviceDesc = $('#editInputDeviceDesc').val();
+
+      var validation = validate({ editInputDeviceName }, editConstraints, { fullMessages: false });
+      $('.err-msg').html('');
+
+      if (validation) {
+        Object.keys(validation).forEach(key => {
+          var errMsgId = '#' + key + 'Err';
+          $(errMsgId).html(validation[key][0]);
+        });
+        return;
+      }
+
+      var url = '/device/update/' + _id;
+      var data = { device_name: editInputDeviceName, device_model: model, device_type: typeId, fw_number: fw, hw_number: hw, mfg_date: mfgDate, country: country, description: editInputDeviceDesc };
+      var method = 'PUT';
+      $('#mask').show();
+
+      var updateDevice = CallApi(url, data, method).then((response) => {
+        var status = response.status;
+        if (status == 'success') {
+          deviceElem.data('desc', editInputDeviceDesc);
+          deviceElem.data('name', editInputDeviceName);
+          deviceNameElem.html(editInputDeviceName);
+          $('#mask').hide();
+          $('#editModal').modal('hide');
+          showSuccessToast('Thành công', 'Sửa thông tin thiết bị thành công !');
+        } else {
+          $('#mask').hide();
+          showDangerToast('Thất bại', response.errors[0].msg);
+        }
+      }).catch((err) => {
+        $('#mask').hide();
+        showDangerToast('Thất bại', 'Sửa thông tin thiết bị không thành công');
+      }).finally(() => {
+        $('#mask').hide();
+      })
+    });
+
+    $(document).on('click', '.active-device', function () {
+      var deviceModel = $(this).data('model');
+      var idRow = $(this).data('idRow');
+      var deviceSerial = $(idRow).data('serial');
+
+      if (deviceModel == 'BSGW' || deviceModel == 'AHSD') {
+        $('#activeDeviceSubmitBtn').data({ idRow, deviceSerial, deviceModel });
+        $('#activeDeviceGroup').val('');
+        $('#activeDeviceModal').modal('show');
+      } else {
+        $('#activeNodeSubmitBtn').data({ idRow, deviceSerial, deviceModel });
+        $('#activeNodeGroup').val('');
+        $('#activeNodeModal').modal('show');
+      }
+    })
+
+
+    //active device
+    
+    $('#activeDeviceUserName').SearchElement({
+      searchContainer: '#activeDeviceGroup',
+      searchItem: 'option'
+    });
+    $('#activeDeviceSubmitBtn').on('click', async function () {
+      var deviceSerial = $(this).data('deviceSerial');
+      var idRow = $(this).data('idRow');
+      var idDevice = $(idRow).data('_id');
+      var idGroup = $('#activeDeviceGroup').val();
+      var groupName = $('#activeDeviceGroup option:selected').text();
+
+      var activeDeviceConstraints = {
+        activeDeviceGroup: {
+          presence: { allowEmpty: false, message: 'Chọn farm active' }
+        }
+      };
+
+      var validation = validate({ activeDeviceGroup: idGroup }, activeDeviceConstraints, { fullMessages: false });
+      $('.err-msg').html('');
+
+      if (validation) {
+        Object.keys(validation).forEach(key => {
+          var errMsgId = '#' + key + 'Err';
+          $(errMsgId).html(validation[key][0]);
+        });
+        return;
+      }
+
+      var url = '/device/active-device/';
+      var data = {
+        serial: deviceSerial,
+        group: idGroup,
+        token: 'none'
+      };
+      var method = 'POST';
+      $('#mask').show();
+
+      var activeDevice = CallApi(url, data, method).then((response) => {
+        var status = response.status;
+        if (status == 'success') {
+          $(idRow).data('group', idGroup);
+          $(idRow + ' .device-group').html(groupName);
+          $('.list-node-' + idDevice + ' .device-group').html(groupName);
+
+          $('#mask').hide();
+          $('#activeDeviceModal').modal('hide');
+          showSuccessToast('Thành công', 'Active thiết bị thành công !');
+        } else {
+          $('#mask').hide();
+          showDangerToast('Thất bại', response.errors[0].msg);
+        }
+      }).catch((err) => {
+        $('#mask').hide();
+        showDangerToast('Thất bại', 'Active thiết bị không thành công');
+      }).finally(() => {
+        $('#mask').hide();
+      })
+    })
+
+    //active node
+    /*
+    $('#activeNodeSubmitBtn').on('click', async function () {
+      var deviceSerial = $(this).data('deviceSerial');
+      var idRow = $(this).data('idRow');
+      var idDevice = $(idRow).data('_id');
+      var gateway = $('#activeNodeGateWay').val();
+      var nodeElem = $(idRow);
+
+      var activeDeviceConstraints = {
+        activeNodeGateWay: {
+          presence: { allowEmpty: false, message: 'Chọn gateway active' }
+        }
+      };
+
+      var validation = validate({ activeDeviceGroup: idGroup }, activeDeviceConstraints, { fullMessages: false });
+      $('.err-msg').html('');
+
+      if (validation) {
+        Object.keys(validation).forEach(key => {
+          var errMsgId = '#' + key + 'Err';
+          $(errMsgId).html(validation[key][0]);
+        });
+        return;
+      }
+
+      var url = '/device/active-device/';
+      var data = {
+        serial: deviceSerial,
+        group: idGroup,
+        token: 'none'
+      };
+      var method = 'POST';
+      $('#mask').show();
+
+      var activeDevice = CallApi(url, data, method).then((response) => {
+        var status = response.status;
+        if (status == 'success') {
+          $(idRow).data('group', idGroup);
+          $(idRow + ' .device-group').html(groupName);
+          $('.list-node-' + idDevice + ' .device-group').html(groupName);
+
+          $('#mask').hide();
+          $('#activeDeviceModal').modal('hide');
+          showSuccessToast('Thành công', 'Active thiết bị thành công !');
+        } else {
+          $('#mask').hide();
+          showDangerToast('Thất bại', response.errors[0].msg);
+        }
+      }).catch((err) => {
+        $('#mask').hide();
+        showDangerToast('Thất bại', 'Active thiết bị không thành công');
+      }).finally(() => {
+        $('#mask').hide();
+      })
+    })
+    */
+  });
+</script>

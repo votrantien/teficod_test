@@ -1,0 +1,156 @@
+<link rel="stylesheet" href="/css/device_value_ahsd.css">
+<div id="page-wrapper">
+    <input type="hidden" id="user" value="{{username}}">
+    <div class="dropdown-list-wrap" style="padding: 5px;">
+        <label for="selectGroupDevice">Chọn nhóm thiết bị: </label>
+        <select id="selectGroupDevice" class="dropdown-list">
+            {{#userGroups as |group|}}
+            <option value="{{group._id}}">{{group.group_name}}</option>
+            {{/userGroups}}
+            <option class="text-cap" disabled>-- Nhóm được chia sẻ --</option>
+            {{#listGroupShare as |group|}}
+            <option value="{{group._id}}">{{group.group_name}}</option>
+            {{/listGroupShare}}
+        </select>
+    </div>
+    <div class="row">
+        {{!-- group --}}
+        {{#listGroups as |group|}}
+        {{#if_ @index '>' '0'}}
+        <div class="col-lg-12 group-wrapper" id="group-wrapper-{{group._id}}" style="display: none;">
+            {{else}}
+            <div class="col-lg-12 group-wrapper" id="group-wrapper-{{group._id}}">
+                {{/if_}}
+                {{!-- group label --}}
+                <button class="export-data-btn fas fa-file-export" data-group-id="{{group._id}}"></button>
+
+                <div class="group-label">
+                    <i class="fas fa-leaf fa-lg"></i>
+                    <span class="group-name">{{this.group_name}}</span>
+                </div>
+                {{!-- group item --}}
+                <div class="row group-item" id="g-{{group._id}}">
+
+                    {{!-- tab gateway controll --}}
+                    <div class="tab-controll">
+                        {{#each ../devices as |device|}}
+                        {{#if_ device.group._id '==' group._id}}
+                        <button class="tab-link status-na"
+                            onclick="openGroupContent('dev-{{device.sn_number}}',this,'g-{{group._id}}')"
+                            id="tab-{{device.sn_number}}">
+                            {{device.device_name}}</button>
+                        {{/if_}}
+                        {{/each}}
+                    </div>
+                    {{!-- tab content gateway --}}
+                    {{#each ../devices as |device|}}
+                    {{#if_ device.group._id '==' group._id}}
+                    <div class="tab-content" id="dev-{{device.sn_number}}" style="display: none;">
+                        <input type="hidden" class="device_sn" value="{{device.sn_number}}">
+                        {{!-- device item --}}
+                        <div class="date-picker-div">
+                            <label for="#date-picker-{{device.sn_number}}">
+                                Thời gian
+                            </label>
+                            <input type="button" class="date-picker" id="date-picker-{{device.sn_number}}"
+                                chart-id="chart-{{device.sn_number}}">
+                        </div>
+                        {{!-- device controll --}}
+                        <div class="group-device-item">
+                            {{#each device.device_type.uom_values as |value_type|}}
+                            <button class="device-item" style="background-color: {{value_type.color}};"
+                                id="val-{{device.sn_number}}-{{@key}}" device-sn="{{device.sn_number}}"
+                                color="{{value_type.color}}" key-value="{{@key}}" value-name="{{value_type.name}}"
+                                uom="{{value_type.uom}}" on-chart="false">
+                                <p class="device-item-dynamic-value">
+                                    <span class="value-type">{{value_type.name}}</span>
+                                    <br>
+                                    <span class="device-item-value ">
+                                        <span class="value-wrapper">
+                                            <i class="value">N/a</i>
+                                            <sub class="uom">{{value_type.uom}}</sub>
+                                        </span>
+                                    </span>
+                                    <br>
+                                </p>
+                            </button>
+                            {{/each}}
+                        </div>
+                        {{!-- chart area --}}
+                        <div class="chart-area" style="display: none;">
+                            <input type="hidden" id="uom-key-{{device.sn_number}}">
+                            <div class="quick-time-wrapper col-lg-12">
+                                <ul class="quick-time-list">
+                                    <li class="quick-time-item" style="border:solid 1px #016343; color:#016343;"
+                                        data-time-limit="3"><span style="color: #fff;">3h</span></li>
+                                    <li class="quick-time-item" style="border:solid 1px #016343; color:#016343;"
+                                        data-time-limit="6"><span style="color: #fff;">6h</span></li>
+                                    <li class="quick-time-item" style="border:solid 1px #016343; color:#016343;"
+                                        data-time-limit="9"><span style="color: #fff;">9h</span></li>
+                                    <li class="quick-time-item" style="border:solid 1px #016343; color:#016343;"
+                                        data-time-limit="12"><span style="color: #fff;">12h</span></li>
+                                    <li class="quick-time-item high-light-box"
+                                        style="border:solid 1px #016343; color:#016343;" data-time-limit="24"><span
+                                            style="color: #fff;">24h</span></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-12 chart-wrapper">
+                                <canvas id="chart-{{device.sn_number}}" width="100%" class="chart-canvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    {{!-- device item --}}
+                    {{/if_}}
+                    {{/each}}
+                </div>
+                {{!-- tab content gateway --}}
+            </div>
+            {{/listGroups}}
+            {{!-- end group --}}
+        </div>
+        <!-- /.row -->
+    </div>
+
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="exportModal">
+    <div class="modal-dialog radius-none" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xuất dữ liệu</h5>
+            </div>
+            <div class="modal-body">
+                <div class="date-picker-div">
+                    <label for="dateExport">Thời gian</label>
+                    <input type="text" readonly class="date-picker-export" id="dateExport">
+                    <button id="dateExportBtn" class="fas fa-calendar-alt"></button>
+                </div>
+                <div class="input-group">
+                    <label class="input-group-addon radius-none" for="deviceGroupExport">Chọn group</label>
+                    <select id="deviceGroupExport" class="form-control radius-none text-dark text-bold text-cap">
+                        {{#each userGroups as |group|}}
+                        <option class="text-dark text-bold text-cap" value="{{group._id}}">
+                            {{group.group_name}}
+                        </option>
+                        {{/each}}
+                        <option class="text-cap" disabled>-- Nhóm được chia sẻ --</option>
+                        {{#each listGroupShare as |group|}}
+                        <option class="text-dark text-bold text-cap" value="{{group._id}}">
+                            {{group.group_name}}
+                        </option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="exportModalSubmit" submit-type="none">Xuất</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="exportModalCancel">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/vendor/chart.min.js"></script>
+<script src="/vendor/chartjs-adapter-date-fns.bundle.min.js"></script>
+<script src="/vendor/jquery.daterangepicker.js"></script>
+<script src="/js/device_value_ahsd.js"></script>

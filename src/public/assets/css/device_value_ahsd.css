@@ -1,0 +1,50 @@
+
+.group-uom{
+    display: flex !important;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.ahsd-uom {
+    width: 180px;
+    max-width: 200px;
+    cursor: pointer;
+    min-height: 100px;
+    margin-right: 5px;
+}
+
+.ahsd-uom .uom-name {
+    width: 100%;
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    position: absolute;
+    bottom: 0;
+}
+
+.ahsd-uom .uom-value {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.ahsd-uom .uom-value h3 {
+    width: 100%;
+    text-align: right;
+}
+
+.form-control[readonly] {
+    background-color: #2A3038!important;
+    cursor: pointer;
+}
+
+.on-chart::before {
+    position: absolute;
+    content: "\F12A";
+    bottom: 5px;
+    right: 5px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #0bf127;
+}

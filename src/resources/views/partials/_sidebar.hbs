@@ -1,0 +1,54 @@
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+  <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+    <a class="sidebar-brand brand-logo" href="/"><img src="/assets/images/logo-full.png" alt="logo"
+        style="width:180px; height:50px;" /></a>
+    <a class="sidebar-brand brand-logo-mini" href="/"><img src="/assets/images/logo-mini.png"
+        style="width:50px; height:47px;" alt="logo" /></a>
+  </div>
+  <ul class="nav">
+    <li class="nav-item menu-items">
+      <a class="nav-link" href="/" dashboard="true">
+        <span class="menu-icon">
+          <i class="mdi mdi-speedometer"></i>
+        </span>
+        <span class="menu-title">Dashboard</span>
+      </a>
+    </li>
+    <li class="nav-item menu-items">
+      <a class="nav-link" href="/device/device-manage">
+        <span class="menu-icon">
+          <i class="mdi mdi-playlist-play"></i>
+        </span>
+        <span class="menu-title">Quản lý thiết bị</span>
+      </a>
+    </li>
+    <li class="nav-item menu-items">
+      <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+        <span class="menu-icon">
+          <i class="mdi mdi-chart-areaspline"></i>
+        </span>
+        <span class="menu-title">Số liệu thống kê</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="ui-basic">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" href="/device/sensor">Thông số môi trường</a></li>
+          <li class="nav-item"> <a class="nav-link" href="/device/ahsd">Thông số dinh dưỡng</a></li>
+        </ul>
+      </div>
+    </li>
+
+    {{!-- admin tools --}}
+
+    {{#if_ user.role '==' 'admin'}}
+    <li class="nav-item menu-items">
+      <a class="nav-link" href="/user/user-manage">
+        <span class="menu-icon">
+          <i class="mdi mdi-account-multiple"></i>
+        </span>
+        <span class="menu-title">Quản lý người dùng</span>
+      </a>
+    </li>
+    {{/if_}}
+  </ul>
+</nav>

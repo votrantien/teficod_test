@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{{title}}</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/assets/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="/assets/vendors/jvectormap/jquery-jvectormap.css">
+  <link rel="stylesheet" href="/assets/vendors/flag-icon-css/css/flag-icon.min.css">
+  <link rel="stylesheet" href="/assets/vendors/owl-carousel-2/owl.carousel.min.css">
+  <link rel="stylesheet" href="/assets/vendors/owl-carousel-2/owl.theme.default.min.css">
+  <link rel="stylesheet" href="/assets/vendors/jquery-toast-plugin/jquery.toast.min.css">
+  <link rel="stylesheet" type="text/css" href="/assets/css/teficod_font.css" />
+  <!-- End plugin css for this page -->
+  {{!-- section css --}}
+  {{{_sections.css}}}
+  {{!-- end section css --}}
+  <!-- inject:css -->
+  <!-- endinject -->
+  <!-- Layout styles -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="/assets/images/favicon.png" />
+  <!-- plugins:js -->
+  <script src="/assets/vendors/js/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.js"></script>
+  <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
+  <script type="text/javascript" src="/assets/vendors/js/moment.js"></script>
+  <script type="text/javascript" src="/assets/vendors/js/validate.js"></script>
+  <!-- endinject -->
+</head>
+
+<body class="sidebar-fixed">
+  <div id="topPoint"></div>
+  {{!-- loading mask --}}
+  <div id="mask" style="display: block;" onload="showMask()">
+    <div class="spinner-border"></div>
+  </div>
+
+  <input type="hidden" id="userName" value="{{username}}">
+  {{{body}}}
+
+  <!-- container-scroller -->
+  {{!-- plugin --}}
+  <script src="/assets/vendors/jquery-toast-plugin/jquery.toast.min.js"></script>
+  {{!-- end plugin --}}
+  {{!-- section script --}}
+  {{{_sections.script}}}
+  {{!-- end Section script --}}
+  <!-- inject:js -->
+  <script src="/assets/js/off-canvas.js"></script>
+  <script src="/assets/js/hoverable-collapse.js"></script>
+  <script src="/assets/js/misc.js"></script>
+  <script src="/assets/js/settings.js"></script>
+  <script src="/assets/js/todolist.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script type="text/javascript" src="/assets/js/export2excel.js"></script>
+  <!-- endinject -->
+  <script>
+    window.onload = function () {
+      $('#mask').hide();
+    }
+  </script>
+</body>
+
+</html>

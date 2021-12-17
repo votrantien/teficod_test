@@ -1,0 +1,75 @@
+<div class="container-scroller">
+  <div class="container-fluid page-body-wrapper full-page-wrapper">
+    <div class="row w-100 m-0">
+      <div class="content-wrapper full-page-wrapper align-items-center auth login-bg">
+        <div class="col-lg-4 text-center pb-2 mt-2 mx-auto custom-login-header">
+          <img src="/assets/images/auth/logo.png" width="130" alt="logo" />
+          <h3 class="custom-login-title">Teficod - Hydroponic System</h3>
+        </div>
+        <div class="card col-lg-4 mx-auto custom-login-card" style="border-radius: 15px;">
+          <div class="card-body px-3 py-3">
+            <h3 class="card-title text-left mb-3">Đăng nhập</h3>
+            <p id="errMsg" class="err-msg"></p>
+            <form id="loginForm">
+              <div class="form-group">
+                <label>Tên đăng nhập *</label>
+                <input type="text" class="form-control p_input" id="username">
+              </div>
+              <div class="form-group">
+                <label>Mật khẩu *</label>
+                <input type="password" class="form-control p_input" id="password">
+              </div>
+              <div class="form-group d-flex align-items-center justify-content-between">
+                <a href="#" class="forgot-pass">Quên mật khẩu</a>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-block enter-btn">Đăng nhập</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+    </div>
+    <!-- row ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>
+
+
+<script>
+  $('body').removeClass('sidebar-fixed');
+  $('#loginForm').submit(async function (e) {
+    e.preventDefault();
+    var username = $('#username').val();
+    var password = $('#password').val();
+
+    $('#errMsg').html('');
+    if (username.trim() == '' || password.trim() == '') {
+      $('#errMsg').html('Tên đăng nhập và mật khẩu không được để trống');
+      return;
+    }
+    $('#mask').show();
+    var url = '/auth/sign-in';
+    var method = 'POST';
+    var data = { username: username, password: password };
+
+    $('#mask').show();
+    var login = await CallApi(url, data, method).then(function (res) {
+      var status = res.status;
+      if (status == 'success') {
+        $('#mask').hide();
+        document.location.href = "/";
+      } else {
+        $('#mask').hide();
+        $('#errMsg').html(res.errors[0].msg);
+        $('#errMsg').show();
+      }
+    }).catch(function (err) {
+      $('#mask').hide();
+      alertAction('failure', err);
+    }).finally(function () {
+      $('#mask').hide();
+    })
+  });
+</script>

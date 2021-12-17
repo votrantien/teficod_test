@@ -1,0 +1,503 @@
+<div class="container-scroller">
+  <!-- partial:../../partials/_sidebar.html -->
+  {{>_sidebar}}
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:../../partials/_navbar.html -->
+    {{>_navbar}}
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Danh sách người dùng</h4>
+                <div class="d-flex justify-content-end">
+                  <button type="button" class="btn btn-primary btn-icon-text" id="addUser">
+                    <i class="mdi mdi-library-plus btn-icon-prepend"></i> Thêm mới </button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-hover table-contextual" id="listUsertable">
+                    <thead>
+                      <tr>
+                        <th>Công cụ</th>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Họ tên</th>
+                        <th>Điện thoại</th>
+                        <th>Loại TK</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày tạo</th>
+                        <th>Ngày sửa</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {{#each userList as |user|}}
+                      <tr class="user-row" id="user{{user._id}}">
+                        <td class="user-manage-tools">
+                          <button class="btn btn-sm p-1 mdi mdi-wrench mdi-18px edit-user-info"
+                            data-id-row="#user{{user._id}}" title="Sửa thông tin" data-uid="{{user._id}}"></button>
+                          <button class="btn btn-sm p-1 mdi mdi mdi-key-remove mdi-18px reset-password"
+                            data-id-row="#user{{user._id}}" title="Reset mật khẩu" data-uid="{{user._id}}"></button>
+                          {{#if_ user.status '==' '1'}}
+                          <button class="btn btn-sm p-1 mdi mdi-lock mdi-18px change-status"
+                            data-id-row="#user{{user._id}}" title="Đổi trạng thái người dùng" data-uid="{{user._id}}"
+                            data-status="{{user.status}}"></button>
+                          {{else}}
+                          <button class="btn btn-sm p-1 mdi mdi-lock-open mdi-18px change-status"
+                            data-id-row="#user{{user._id}}" title="Đổi trạng thái người dùng" data-uid="{{user._id}}"
+                            data-status="{{user.status}}"></button>
+                          {{/if_}}
+
+                        </td>
+                        <td class="user-name">{{user.username}}</td>
+                        <td class="user-email">{{user.email}}</td>
+                        <td class="user-full-name">{{user.fullname}}</td>
+                        <td class="user-phone">{{user.phone}}</td>
+                        <td class="user-role">{{user.role}}</td>
+                        <td class="user-status">
+                          {{#if_ user.status '==' '1'}}
+                          <span class="text-success">Active</span>
+                          {{else}}
+                          <span class="text-danger">In-Active</span>
+                          {{/if_}}
+                        </td>
+                        <td class="user-create-at">{{dateFormat user.createdAt format='DD/MM/YYYY HH:mm'}}</td>
+                        <td class="user-update-at">{{dateFormat user.updatedAt format='DD/MM/YYYY HH:mm'}}</td>
+                      </tr>
+                      {{/each}}
+                    </tbody>
+                  </table>
+                </div>
+                <div id="paginationContainer">
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:../../partials/_footer.html -->
+      {{>_footer}}
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+</div>
+
+
+{{!-- change info modal --}}
+<div class="modal" tabindex="-1" role="dialog" id="changeInfoModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body p-0">
+
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Đổi thông tin người dùng</h4>
+            <div class="form-group">
+              <label for="editInputFullName">Tên</label>
+              <p class="text-danger err-msg" id="editInputFullNameErr"></p>
+              <input type="text" class="form-control" id="editInputFullName" placeholder="Tên đầy đủ">
+            </div>
+
+            <div class="form-group">
+              <label for="editInputPhone">Số điện thoại</label>
+              <p class="text-danger err-msg" id="editInputPhoneErr"></p>
+              <input type="text" class="form-control" id="editInputPhone" placeholder="Số điện thoại">
+            </div>
+
+            <div class="form-group">
+              <label for="editInputEmail">Email</label>
+              <p class="text-danger err-msg" id="editInputEmailErr"></p>
+              <input type="text" class="form-control" id="editInputEmail" placeholder="Email">
+            </div>
+
+            {{!-- <div class="form-group">
+              <label for="authPassword">Mật khẩu hiện tại</label>
+              <input type="text" class="form-control password-field" id="authPassword">
+            </div> --}}
+            <br>
+            <button type="button" class="btn btn-primary mr-2" id="changeInfoModalSubmit">Thay đổi</button>
+            <button type="button" class="btn btn-dark" data-dismiss="modal" id="changeInfoModalCancel">Đóng</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- change info modal --}}
+<div class="modal" tabindex="-1" role="dialog" id="addUserModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body p-0">
+
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Thêm người dùng</h4>
+            <div class="form-group">
+              <label for="addInputUserName">Tên đăng nhập</label>
+              <p class="text-danger err-msg" id="addInputUserNameErr"></p>
+              <input type="text" class="form-control" id="addInputUserName" placeholder="Tên đăng nhập">
+            </div>
+
+            <div class="form-group">
+              <label for="addInputFullName">Họ tên</label>
+              <p class="text-danger err-msg" id="addInputFullNameErr"></p>
+              <input type="text" class="form-control" id="addInputFullName" placeholder="Tên đầy đủ">
+            </div>
+
+            <div class="form-group">
+              <label for="addInputPhone">Số điện thoại</label>
+              <p class="text-danger err-msg" id="addInputPhoneErr"></p>
+              <input type="text" class="form-control" id="addInputPhone" placeholder="Số điện thoại">
+            </div>
+
+            <div class="form-group">
+              <label for="addInputEmail">Email</label>
+              <p class="text-danger err-msg" id="addInputEmailErr"></p>
+              <input type="text" class="form-control" id="addInputEmail" placeholder="Email">
+            </div>
+            <br>
+            <button type="button" class="btn btn-primary mr-2" id="addUserModalSubmit">Thêm</button>
+            <button type="button" class="btn btn-dark" data-dismiss="modal" id="addUserModalCancel">Đóng</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- change info modal --}}
+<div class="modal" tabindex="-1" role="dialog" id="noticeModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body p-0">
+
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Thông báo</h4>
+            <p class="notice-message"></p>
+            <br>
+            <button type="button" class="btn btn-primary mr-2" id="noticeModalSubmit">Chấp nhận</button>
+            <button type="button" class="btn btn-dark" data-dismiss="modal" id="noticeModalCancel">Đóng</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#section 'script'}}
+
+{{/section}}
+<script>
+  $(document).ready(function () {
+    //pagination
+    $('#paginationContainer').RenderPaginationControl({
+      showItemQty: 5,
+      itemQty: CountItem('listUsertable', 'user-row'),
+      idTable: 'listUsertable',
+      trClass: 'user-row'
+    });
+    // edit user
+    $(document).on('click', '.edit-user-info', function () {
+      var uid = $(this).data('uid');
+      var rowId = $(this).data('idRow');
+      var currFullName = $(rowId + ' .user-full-name').text();
+      var currEmail = $(rowId + ' .user-email').text();
+      var currPhone = $(rowId + ' .user-phone').text();
+      var userName = $(rowId + ' .user-name').text();
+
+      $('#editInputFullName').val(currFullName);
+      $('#editInputEmail').val(currEmail);
+      $('#editInputPhone').val(currPhone);
+
+      $('#changeInfoModalSubmit').data('uid', uid);
+      $('#changeInfoModal .err-msg').html('');
+      $('#changeInfoModal').modal('show');
+    })
+
+    var editUserConstraints = {
+      editInputFullName: {
+        presence: { allowEmpty: false, message: 'Tên user không được để trống' },
+        length: { minimum: 6, maximum: 30, message: 'Tên user phải từ 6 đến 30 ký tự' },
+      },
+      editInputEmail: {
+        presence: { allowEmpty: false, message: 'Email không được để trống' },
+        email: { message: ": Sai định dạng email" }
+      },
+      editInputPhone: {
+        presence: { allowEmpty: false, message: 'Số điện thoại không được để trống' },
+        length: { minimum: 9, message: ': Số điện thoại phải từ 9 số' },
+        format: {
+          pattern: "[0-9]+",
+          flags: "i",
+          message: "Số điện thoại phải là số từ 0-9"
+        }
+      },
+    };
+
+    $('#changeInfoModalSubmit').on('click', async function () {
+
+
+      var editInputFullName = $('#editInputFullName').val().trim();
+      var editInputEmail = $('#editInputEmail').val().trim();
+      var editInputPhone = $('#editInputPhone').val().trim();
+      var updatedAt = moment(new Date).format('DD/MM/YYYY HH:mm');
+      var uid = $(this).data('uid');
+
+      var validation = validate({ editInputFullName, editInputEmail, editInputPhone }, editUserConstraints, { fullMessages: false });
+      $('.err-msg').html('');
+
+      if (validation) {
+        Object.keys(validation).forEach(key => {
+          var errMsgId = '#' + key + 'Err';
+          $(errMsgId).html(validation[key][0]);
+        });
+        return;
+      }
+
+      var url = '/user/change-info/' + uid;
+      var method = 'PUT';
+      var data = {
+        email: editInputEmail,
+        fullname: editInputFullName,
+        phone: editInputPhone
+      };
+
+      $('#mask').show();
+      var addUser = await CallApi(url, data, method).then(function (res) {
+        var status = res.status;
+        if (status == 'success') {
+          var idRow = '#user' + uid;
+          $(idRow + ' .user-full-name').text(editInputFullName);
+          $(idRow + ' .user-phone').text(editInputPhone);
+          $(idRow + ' .user-email').text(editInputEmail);
+          $(idRow + ' .user-update-at').text(updatedAt);
+
+          $('#mask').hide();
+          $('#changeInfoModal').modal('hide');
+          showSuccessToast('Thành công', 'Sửa thông tin thành công !');
+        } else {
+          $('#mask').hide();
+          showDangerToast('Thất bại', response.errors[0].msg);
+        }
+      }).catch(function (err) {
+        $('#mask').hide();
+        showDangerToast('Thất bại', 'Sửa thông tin không thành công');
+      }).finally(function () {
+        $('#mask').hide();
+      })
+    });
+
+
+    //add user
+    $('#addUser').on('click', function () {
+      $('#addUserModal .err-msg').html('');
+      $('#addUserModal').modal('show');
+    })
+
+    var addUserConstraints = {
+      addInputUserName: {
+        presence: { allowEmpty: false, message: 'Tên đăng nhập không được để trống' },
+        length: { minimum: 6, message: 'Tên đăng nhập phải từ 6 ký tự' },
+        format: {
+          pattern: "[a-z0-9]+",
+          flags: "i",
+          message: "Tên đăng nhập gồm các ký tự a-z, 0-9 "
+        }
+      },
+      addInputFullName: {
+        presence: { allowEmpty: false, message: 'Họ tên không được để trống' },
+        length: { minimum: 6, maximum: 30, message: 'Họ tên phải từ 6 đến 30 ký tự' },
+      },
+      addInputEmail: {
+        presence: { allowEmpty: false, message: 'Email không được để trống' },
+        email: { message: ": Sai định dạng email" }
+      },
+      addInputPhone: {
+        presence: { allowEmpty: false, message: 'Số điện thoại không được để trống' },
+        length: { minimum: 9, message: ': Số điện thoại phải từ 9 số' },
+        format: {
+          pattern: "[0-9]+",
+          flags: "i",
+          message: "Số điện thoại phải là số từ 0-9"
+        }
+      },
+    };
+
+    $('#addUserModalSubmit').on('click', async function () {
+
+
+      var addInputUserName = $('#addInputUserName').val().trim();
+      var addInputFullName = $('#addInputFullName').val().trim();
+      var addInputEmail = $('#addInputEmail').val().trim();
+      var addInputPhone = $('#addInputPhone').val().trim();
+
+      var validation = validate({ addInputUserName, addInputFullName, addInputEmail, addInputPhone }, addUserConstraints, { fullMessages: false });
+      $('.err-msg').html('');
+
+      if (validation) {
+        Object.keys(validation).forEach(key => {
+          var errMsgId = '#' + key + 'Err';
+          $(errMsgId).html(validation[key][0]);
+        });
+        return;
+      }
+
+      var url = '/auth/signup';
+      var method = 'POST';
+      var data = {
+        username: addInputUserName,
+        email: addInputEmail,
+        password: 'default',
+        fullname: addInputFullName,
+        phone: addInputPhone,
+        groupname: 'Default Farm'
+      };
+
+      $('#mask').show();
+      var addUser = await CallApi(url, data, method).then(function (res) {
+        var status = res.status;
+        if (status == 'success') {
+          var user = res.user;
+          var createdAt = moment(user.createdAt).format('DD/MM/YYYY HH:mm');
+          var updatedAt = moment(user.updatedAt).format('DD/MM/YYYY HH:mm');
+          var html = `<tr class="user-row" id="user${user._id}">
+                        <td class="user-manage-tools">
+                          <button class="btn btn-sm p-1 mdi mdi-wrench mdi-18px edit-user-info"
+                            data-id-row="#user${user._id}" title="Sửa thông tin" data-uid="${user._id}"></button>
+                          <button class="btn btn-sm p-1 mdi mdi-key-remove mdi-18px reset-password"
+                            data-id-row="#user${user._id}" title="Reset mật khẩu" data-uid="${user._id}"></button>
+                          <button class="btn btn-sm p-1 mdi mdi-lock mdi-18px change-status"
+                            data-id-row="#user${user._id}" title="Đổi trạng thái người dùng" data-uid="${user._id}" data-status="${user.status}"></button>
+                        </td>
+                        <td class="user-name">${user.username}</td>
+                        <td class="user-email">${user.email}</td>
+                        <td class="user-full-name">${user.fullname}</td>
+                        <td class="user-phone">${user.phone}</td>
+                        <td class="user-role">${user.role}</td>
+                        <td class="user-status">
+                          <span class="text-success">Active</span>
+                        </td >
+                        <td class="user-create-at">${createdAt}</td>
+                        <td class="user-update-at">${updatedAt}</td>
+                      </tr >`;
+          $('#listUsertable tbody').prepend(html);
+          $('#mask').hide();
+          $('#addUserModal').modal('hide');
+          showSuccessToast('Thành công', 'Thêm người dùng thành công !');
+        } else {
+          $('#mask').hide();
+          showDangerToast('Thất bại', response.errors[0].msg);
+        }
+      }).catch(function (err) {
+        $('#mask').hide();
+        showDangerToast('Thất bại', 'Thêm người dùng không thành công');
+      }).finally(function () {
+        $('#mask').hide();
+      })
+    })
+
+    // change status
+    $(document).on('click', '.change-status', async function () {
+      var uid = $(this).data('uid');
+      var idRow = $(this).data('idRow');
+      var userStatus = $(this).data('status');
+      var url;
+
+      if (userStatus == '1') {
+        //deactive
+        url = '/user/in-active/' + uid;
+      } else if (userStatus == '0') {
+        //active
+        url = '/user/active/' + uid;
+      }
+
+      var method = 'PUT';
+      var data = {};
+
+      $('#mask').show();
+      var addUser = await CallApi(url, data, method).then(function (res) {
+        var status = res.status;
+        if (status == 'success') {
+
+          if (userStatus == '1') {
+            $(idRow + ' .change-status').removeClass('mdi-lock');
+            $(idRow + ' .change-status').addClass('mdi-lock-open');
+            $(idRow + ' .change-status').data('status', 0);
+            $(idRow + ' .user-status span').removeClass('text-success');
+            $(idRow + ' .user-status span').addClass('text-danger');
+            $(idRow + ' .user-status span').text('In-Active');
+          } else if (userStatus == '0') {
+            $(idRow + ' .change-status').addClass('mdi-lock');
+            $(idRow + ' .change-status').removeClass('mdi-lock-open');
+            $(idRow + ' .change-status').data('status', 1);
+            $(idRow + ' .user-status span').addClass('text-success');
+            $(idRow + ' .user-status span').removeClass('text-danger');
+            $(idRow + ' .user-status span').text('Active');
+          }
+          $('#mask').hide();
+          showSuccessToast('Thành công', 'Đổi trạng thái người dùng thành công !');
+        } else {
+          $('#mask').hide();
+          showDangerToast('Thất bại', response.errors[0].msg);
+        }
+      }).catch(function (err) {
+        $('#mask').hide();
+        showDangerToast('Thất bại', 'Đổi trạng thái người dùng không thành công');
+      }).finally(function () {
+        $('#mask').hide();
+      })
+    })
+
+
+    //reset password
+
+    $(document).on('click', '.reset-password', function () {
+      var uid = $(this).data('uid');
+      var idRow = $(this).data('idRow');
+      var userName = $(idRow + ' .user-name').text();
+      $('#noticeModal .notice-message').html('Xác nhận reset password user <span class="text-info">' + userName + '</span>');
+      $('#noticeModalSubmit').data('uid', uid);
+      $('#noticeModal').modal('show');
+    });
+
+    $('#noticeModalSubmit').on('click', async function () {
+      var uid = $(this).data('uid');
+      var url = '/user/reset-password/' + uid;
+      var method = 'PUT';
+      var data = {};
+
+      $('#mask').show();
+      var addUser = await CallApi(url, data, method).then(function (res) {
+        var status = res.status;
+        if (status == 'success') {
+          $('#noticeModal').modal('hide');
+          $('#mask').hide();
+          showSuccessToast('Thành công', 'Reset mật khẩu người dùng thành công !');
+        } else {
+          $('#mask').hide();
+          showDangerToast('Thất bại', response.errors[0].msg);
+        }
+      }).catch(function (err) {
+        $('#mask').hide();
+        showDangerToast('Thất bại', 'Reset mật khẩu người dùng không thành công');
+      }).finally(function () {
+        $('#mask').hide();
+      })
+    });
+
+  });
+</script>

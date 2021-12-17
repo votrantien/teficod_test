@@ -1,0 +1,387 @@
+# ---------------- user
+
+### login
+POST http://localhost:3000/auth/sign-in/ HTTP/1.1
+Content-Type: application/json
+
+{"username":"usertest","password":"123456789"}
+
+### logout
+GET http://localhost:3000/auth/sign-out/ HTTP/1.1
+
+### signup
+ 
+POST http://45.124.87.133:8443/auth/signup/ HTTP/1.1
+Content-Type: application/json
+
+{
+   "username":"phamvu", 
+   "email":"phamhongvu@gmail.com",
+   "password":"123456",
+   "fullname":"Phạm Hồng Vũ",
+   "phone":"0936550579",
+   "groupname":"Default Farm"}
+
+
+### vao trang user
+GET http://localhost:3000/user/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYzQ5MzUyMmVhNDVjMzhkMDUwNDQ2MiIsImlhdCI6MTYyNDk0MzAyMywiZXhwIjoxNjI1MjAyMjIzfQ.3CLkIbDHclcyT7R09NvtlahSNmb5oI1_0gg6kJGn72A
+
+### reset pass
+ 
+POST http://localhost:3000/user/reset-password HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYzQ5MzUyMmVhNDVjMzhkMDUwNDQ2MiIsImlhdCI6MTYyNDk0MzAyMywiZXhwIjoxNjI1MjAyMjIzfQ.3CLkIbDHclcyT7R09NvtlahSNmb5oI1_0gg6kJGn72A
+
+
+### doi mat khau
+
+PUT http://localhost:3000/user/change-password/admin HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYzQ5MzUyMmVhNDVjMzhkMDUwNDQ2MiIsImlhdCI6MTYyNDk0MzAyMywiZXhwIjoxNjI1MjAyMjIzfQ.3CLkIbDHclcyT7R09NvtlahSNmb5oI1_0gg6kJGn72A
+
+{"old_password":"12345678","new_password":"123456789"}
+
+
+# -------------- device
+
+### tao moi thiet bi
+# aplication/json post create
+POST http://localhost:3000/device/create HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYzQ5MzUyMmVhNDVjMzhkMDUwNDQ2MiIsImlhdCI6MTYyNDk0MzAyMywiZXhwIjoxNjI1MjAyMjIzfQ.3CLkIbDHclcyT7R09NvtlahSNmb5oI1_0gg6kJGn72A
+
+{"device_code":"DEVCODE1367", "device_type_id":"60cad0ddc1e824108c785a5b", "device_name":"DEVNAME", "device_model":"devmodel", "sn_number":"123456789136", "fw_number":"987654321",  "mfg":"mfg", "id_user_add_device":"60c493522ea45c38d0504462", "location":"8"}
+### lay all thiet bi
+GET http://localhost:3000/device/list HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYzQ5MzUyMmVhNDVjMzhkMDUwNDQ2MiIsImlhdCI6MTYyNDk0MzAyMywiZXhwIjoxNjI1MjAyMjIzfQ.3CLkIbDHclcyT7R09NvtlahSNmb5oI1_0gg6kJGn72A
+### sua thong tin thiet bi
+PUT http://localhost:3000/device/update/60ceb8390674020c8067c158 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYzQ5MzUyMmVhNDVjMzhkMDUwNDQ2MiIsImlhdCI6MTYyNDk0MzAyMywiZXhwIjoxNjI1MjAyMjIzfQ.3CLkIbDHclcyT7R09NvtlahSNmb5oI1_0gg6kJGn72A
+
+{"device_code":"DEVCODE1367", "device_type_id":"60cad0ddc1e824108c785a5b", "device_name":"DEVNAME", "device_model":"devmodel", "sn_number":"123456789136", "fw_number":"987654321",  "mfg":"mfg", "id_user_add_device":"60c493522ea45c38d0504462", "location":"8"}
+
+### xoa thiet bi
+
+DELETE  http://localhost:3000/device/delete/60c8237d160e790208baa903 HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYzQ5MzUyMmVhNDVjMzhkMDUwNDQ2MiIsImlhdCI6MTYyNDk0MzAyMywiZXhwIjoxNjI1MjAyMjIzfQ.3CLkIbDHclcyT7R09NvtlahSNmb5oI1_0gg6kJGn72A
+
+### lay thiet bi theo id thiet bi
+GET http://localhost:3000/device/60cacee15e4f992798feba65 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYzQ5MzUyMmVhNDVjMzhkMDUwNDQ2MiIsImlhdCI6MTYyNDk0MzAyMywiZXhwIjoxNjI1MjAyMjIzfQ.3CLkIbDHclcyT7R09NvtlahSNmb5oI1_0gg6kJGn72A
+###
+
+# ------------- device type
+### tao loai thiet bi
+POST http://localhost:3000/device-type/create HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYzQ5MzUyMmVhNDVjMzhkMDUwNDQ2MiIsImlhdCI6MTYyNDk0MzAyMywiZXhwIjoxNjI1MjAyMjIzfQ.3CLkIbDHclcyT7R09NvtlahSNmb5oI1_0gg6kJGn72A
+
+{
+   "prefix":"NOCO",
+   "device_type":"node CO2",
+   "description":"Đọc CO2 trong không khí (ppm)"
+}
+###
+
+### API Device
+### đăng ký thiết bị
+### tao moi thiet bi
+# aplication/json post create
+POST http://localhost:3000/device/register-device HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYzQ5MzUyMmVhNDVjMzhkMDUwNDQ2MiIsImlhdCI6MTYyNDk0MzAyMywiZXhwIjoxNjI1MjAyMjIzfQ.3CLkIbDHclcyT7R09NvtlahSNmb5oI1_0gg6kJGn72A
+
+{
+   "Serial":"AHSD12345678",
+   "Action":"registor",
+   "Token":"hsvhjv565jhdvzjhv",
+   "Fw":"1.00",
+   "Hw":"1.00",
+   "Date":"2021-06-20",
+   "Country":"Viet Nam"
+}
+
+### active thiet bi
+GET http://localhost:3000/device/active?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZGU5YTZkMWZjNThhMWNlYzAyMTY0MCIsImlhdCI6MTYyNTIwMTI2NCwiZXhwIjoxNjI1NDYwNDY0fQ.cAUU8AOMwYV3RUWlknsPrld0ihgsZDhRxaa_6hj_q0g&serial=AHSD12345678&group=60de9a6d1fc58a1cec021641 HTTP/1.1
+
+### get user 
+GET http://localhost:3000/user/user-info/usertest1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyNjA4NjQ1MSwiZXhwIjoxNjI2MzQ1NjUxfQ.7QN6ZlqoTSdMUl3piB1s6GL2mPf21UmcZkOmiMwDEcM
+
+### get time server
+GET http://localhost:3000/device/GetTimeServer HTTP/1.1
+
+###### ---------------------------------------------------------**************----------------------------############
+###### ---------------------------------------------------------**************----------------------------############
+###### ---------------------------------------------------------**************----------------------------############
+
+### API 3/7/2021
+
+# @host = 45.124.87.133:8443
+@host = localhost:3000
+
+### Đăng ký user mới
+
+POST http://{{host}}/auth/signup/ HTTP/1.1
+Content-Type: application/json
+
+{
+   "username":"usertest8", 
+   "email":"votrantien8@ymail.com",
+   "password":"123456789",
+   "fullname":"test user",
+   "phone":"0255848254",
+   "groupname":"group default 1"
+}
+
+### Login và lấy jwt
+
+POST http://{{host}}/auth/sign-in/ HTTP/1.1
+Content-Type: application/json
+
+{"username":"usertest","password":"123456789"}
+
+### Đăng ký thiết bị
+POST http://{{host}}/device/register-device HTTP/1.1
+Content-Type: application/json
+
+{
+   "Serial":"NOTH123456797",
+   "Action":"registor",
+   "Token":"hsvhjv565jhdvzjhv",
+   "Fw":"1.00",
+   "Hw":"1.00",
+   "Date":"2021-06-20",
+   "Country":"Viet Nam"
+}
+
+
+### active thiet bi
+POST http://{{host}}/device/active-device HTTP/1.1
+Content-Type: application/json
+
+{
+   "serial": "AHSD212198243178103172",
+   "group": "61924164489103151024f55c",
+   "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYzQ5MzUyMmVhNDVjMzhkMDUwNDQ2MiIsImlhdCI6MTYzNzkxMzQwMSwiZXhwIjoxNjM4MTcyNjAxfQ.lnuJrDyk-VZ0_yBBUX8UCk3fU577wyoKgeMqxOfctLg"
+}
+
+### active node
+POST http://{{host}}/device/active-node HTTP/1.1
+Content-Type: application/json
+
+{
+   "serial": "NOLX123456795",
+   "token":"beb0ae73d33529556350a702359e6d32",
+   "gate_way":"BSGW123456795"
+}
+
+### deactivate node
+
+POST http://{{host}}/device/deactivate-node HTTP/1.1
+Content-Type: application/json
+
+{
+   "serial": "NOLX123456795",
+   "token":"beb0ae73d33529556350a702359e6d32"
+}
+
+### xoá tb khỏi user
+
+POST http://{{host}}/device/deactivate-device HTTP/1.1
+Content-Type: application/json
+
+{
+   "serial": "AHSD12345675",
+   "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyNjE3NTc1OSwiZXhwIjoxNjI2NDM0OTU5fQ.mTRt2NG8rRVWpGE1dFNAgxgtNBX7Xb2ojvpejqotWog"
+}
+
+### lấy thông tin user và group
+GET http://{{host}}/user/user-info HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyNjA4NjQ1MSwiZXhwIjoxNjI2MzQ1NjUxfQ.7QN6ZlqoTSdMUl3piB1s6GL2mPf21UmcZkOmiMwDEcM
+
+### get time server
+GET http://{{host}}/device/GetTimeServer HTTP/1.1
+
+### Lấy tất cả thiết bị
+
+GET http://{{host}}/device/list HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyNjA4NjQ1MSwiZXhwIjoxNjI2MzQ1NjUxfQ.7QN6ZlqoTSdMUl3piB1s6GL2mPf21UmcZkOmiMwDEcM
+
+### add value device
+POST http://{{host}}/device/add-value HTTP/1.1
+Content-Type: application/json
+
+{
+   "serial": "NOLX123456794",
+   "gate_way":"BSGW123456795",
+   "data": {"battery":"98","rssi":"-75","val":{"lux":"33.4t"}},
+   "amount_of_values":"4"
+}
+
+### doi mat khau
+
+PUT http://{{host}}/user/change-password HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyNjc3NTU2OSwiZXhwIjoxNjI3MDM0NzY5fQ.p6x0N-rHT1S54-9COr7C8jlvgisE-_EkE4MdXmrrfZA
+
+{"old_password":"1234567869","new_password":"123456789"}
+
+### get logs device
+POST http://{{host}}/device/device-logs HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyNjc3NTU2OSwiZXhwIjoxNjI3MDM0NzY5fQ.p6x0N-rHT1S54-9COr7C8jlvgisE-_EkE4MdXmrrfZA
+
+{
+   "serial": "NOLX123456794",
+   "startDate": "20-07-2021 00:00",
+   "endDate": "20-07-2021 23:59",
+   "everyMinute":"30"
+}
+
+# api 25-08-2021
+### update device group
+PUT http://{{host}}/device-group/update/60dfce07ceeb700f240a2c9b HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyOTg2MzQ1NSwiZXhwIjoxNjMwMTIyNjU1fQ.eztNj0KTWhiZ4dTXo3w1l2XCwwtWFgLIwuddUGa7IUU
+
+{
+   "groupName": "Group 1",
+   "groupDesc": "Mô tả group 1"
+}
+
+### create device group
+
+POST http://{{host}}/device-group/create HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyOTg2MzQ1NSwiZXhwIjoxNjMwMTIyNjU1fQ.eztNj0KTWhiZ4dTXo3w1l2XCwwtWFgLIwuddUGa7IUU
+
+{
+   "groupName": "Group 3",
+   "groupDesc": "Mô tả group 3"
+}
+
+### delete device group
+
+DELETE http://{{host}}/device-group/delete/6125c8d472b2c72300374dd8 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyOTg2MzQ1NSwiZXhwIjoxNjMwMTIyNjU1fQ.eztNj0KTWhiZ4dTXo3w1l2XCwwtWFgLIwuddUGa7IUU
+
+### change device group
+POST http://{{host}}/device/change-device-group HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyOTg2MzQ1NSwiZXhwIjoxNjMwMTIyNjU1fQ.eztNj0KTWhiZ4dTXo3w1l2XCwwtWFgLIwuddUGa7IUU
+
+{
+   "serial": "BSGW5258485BWTEST",
+   "groupId": "60dfce07ceeb700f240a2c9b"
+}
+
+### share group device
+POST http://{{host}}/device-group/share-group HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyOTg2MzQ1NSwiZXhwIjoxNjMwMTIyNjU1fQ.eztNj0KTWhiZ4dTXo3w1l2XCwwtWFgLIwuddUGa7IUU
+
+{
+   "shareUserName": "usertest2",
+   "groupId": "6125f540d27dc507308648cf"
+}
+
+### remove access user group device
+POST http://{{host}}/device-group/remove-access-user HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyOTg2MzQ1NSwiZXhwIjoxNjMwMTIyNjU1fQ.eztNj0KTWhiZ4dTXo3w1l2XCwwtWFgLIwuddUGa7IUU
+
+{
+   "accessUserId": "id",
+   "groupId": "6125f540d27dc507308648cf"
+}
+
+###irrigationScheduling api
+### update schedule
+PUT http://{{host}}/device/edit-mcc-schedule/MCC2MCC2TEST1 HTTP/1.1
+Content-Type: application/json
+
+{
+   "data": {
+            "num_cal":"2",
+            "1": {
+               "outp":"1",
+               "time_start":"00:00",
+               "time_stop":"23:59",
+               "pow":"100",
+               "we_day":"246",
+               "rep_we":"1"
+                  },
+            "2": {
+               "output":"1",
+               "time_start":"00:00",
+               "time_stop":"23:59",
+               "pow":"100",
+               "we_day":"246",
+               "rep_we":"1"
+               }
+         },
+   "token": "1aef8bd60c74f8a296890fae8117b8ae"
+}
+
+### get schedule
+POST  http://{{host}}/device/get-mcc-schedule HTTP/1.1
+Content-Type: application/json
+
+{
+   "serial": "MCC2MCC2TEST1",
+   "token": "1aef8bd60c74f8a296890fae8117b8ae"
+}
+
+### clear schedule
+
+POST  http://{{host}}/device/clear-mcc-schedule HTTP/1.1
+Content-Type: application/json
+
+{
+   "serial": "MCC2MCC2TEST1",
+   "token": "1aef8bd60c74f8a296890fae8117b8ae"
+}
+
+### 17-09-2021 user manage api
+### change info user
+PUT  http://{{host}}/user/change-info/<ID_USER> HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyOTg2MzQ1NSwiZXhwIjoxNjMwMTIyNjU1fQ.eztNj0KTWhiZ4dTXo3w1l2XCwwtWFgLIwuddUGa7IUU
+
+{
+   "email": "emailInput",
+   "fullname": "fullNameInput",
+   "phone": "phoneInput"
+}
+
+### lock account for admin
+PUT  http://{{host}}/user/in-active/<ID_USER> HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyOTg2MzQ1NSwiZXhwIjoxNjMwMTIyNjU1fQ.eztNj0KTWhiZ4dTXo3w1l2XCwwtWFgLIwuddUGa7IUU
+
+### unlock account for admin
+
+PUT  http://{{host}}/user/active/<ID_USER> HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyOTg2MzQ1NSwiZXhwIjoxNjMwMTIyNjU1fQ.eztNj0KTWhiZ4dTXo3w1l2XCwwtWFgLIwuddUGa7IUU
+
+
+### Reset password for admin
+
+PUT  http://{{host}}/user/reset-password/<ID_USER> HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYyOTg2MzQ1NSwiZXhwIjoxNjMwMTIyNjU1fQ.eztNj0KTWhiZ4dTXo3w1l2XCwwtWFgLIwuddUGa7IUU
+
+### api 04-10-2021
+
+### get list device by group id
+GET http://{{host}}/device/list-device-by-group/60dfce07ceeb700f240a2c9b HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTk3NzQ5NTE3MzIyMTZkOGFjNTQ1OSIsImlhdCI6MTYzMzMxNjk1NiwiZXhwIjoxNjMzNTc2MTU2fQ.nC5321gBM68TfnNncVHei-zMHIi8VhHfBQ1s5KWjtC8
+

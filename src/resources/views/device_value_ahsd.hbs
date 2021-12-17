@@ -1,0 +1,294 @@
+<div class="container-scroller">
+  <!-- partial:../../partials/_sidebar.html -->
+  {{>_sidebar}}
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:../../partials/_navbar.html -->
+    {{>_navbar}}
+    <!-- partial -->
+
+    <div class="main-panel">
+      <div class="content-wrapper">
+        {{!-- filter area --}}
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Xem thông số dinh dưỡng</h3>
+            <div class="row">
+              <div class="col-lg-4">
+                <label for="userList">Người dùng: </label>
+                <select class="form-control text-light" id="userList">
+                  {{#if_ role '==' 'user'}}
+                  <option value="{{username}}">{{username}}</option>
+                  <option disabled></option>
+                  <option disabled>Người dùng chia sẻ farm</option>
+                  <option disabled></option>
+                  {{#groupShareList}}
+                  <option value="{{this.manage_user}}">{{this.manage_user}}</option>
+                  {{/groupShareList}}
+                  {{else}}
+                  {{#userList}}
+                  <option value="{{this.username}}">{{this.username}}</option>
+                  {{/userList}}
+                  {{/if_}}
+                </select>
+              </div>
+              <div class="col-lg-4">
+                <label for="groupList">Farm: </label>
+                <select class="form-control text-light" id="groupList">
+                  {{#groupList}}
+                  <option value="{{this._id}}" data-manage-user="{{this.manage_user}}">{{this.group_name}}</option>
+                  {{/groupList}}
+                  {{!-- group share --}}
+                  {{#groupShareList}}
+                  <option value="{{this._id}}" data-manage-user="{{this.manage_user}}" style="display: none;">
+                    {{this.group_name}}</option>
+                  {{/groupShareList}}
+                </select>
+              </div>
+              <div class="col-lg-4">
+                <label>Công cụ: </label>
+                <div class="group-control">
+                  <button type="button" class="btn btn-device btn-icon-text d-flex justify-content-center p-2"
+                    id="exportData">
+                    <i class="mdi mdi-export btn-icon-prepend"></i> Xuất dữ liệu </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {{!-- device type area --}}
+        <div class="card mt-1">
+          <div class="card-body">
+            <div class="row" id="deviceArea">
+              {{!-- tab ahsd list --}}
+              <div class="col-lg-12 p-0" id="ahsdTabList">
+                <ul class="nav nav-tabs" role="tablist">
+                  {{#ahsdList}}
+                  <li class="nav-item col-lg-4 mb-1 p-0 px-1">
+                    <input type="hidden" class="ahsd-serial" value="{{this.sn_number}}">
+                    <a class="nav-link bg-device border-0 text-nowrap overflow-ellipsis {{#if @first}} active {{/if}}"
+                      id="ahsdTab-{{this.sn_number}}" data-toggle="tab" href="#ahsd-{{this.sn_number}}" role="tab"
+                      aria-controls="ahsd" aria-selected="{{#if @first}}true{{else}}false{{/if}}"><span
+                        class="status status-na"></span>{{this.device_name}}</a>
+                  </li>
+                  {{/ahsdList}}
+                </ul>
+              </div>
+              {{!-- ahsd tab content --}}
+              <div class="tab-content col-lg-12" id="ahsdTabContent">
+                {{#unless ahsdList}}
+                <h4 class="w-100 text-center">Nhóm hiện tại chưa có thiết bị</h4>
+                {{/unless}}
+                {{#unless groupList}}
+                <h4 class="w-100 text-center">Tài khoản chưa tạo farm</h4>
+                {{/unless}}
+                {{#ahsdList as |ahsd|}}
+                <div class="tab-pane fade {{#if @first}} active show {{/if}} ahsd-device" id="ahsd-{{this.sn_number}}"
+                  role="tabpanel" aria-labelledby="ahsdTab-{{this.sn_number}}">
+                  {{!-- date time picker --}}
+                  <div class="form-group col-lg-9 col-md-12 mt-3 p-0 date-picker-wrapper"
+                    data-ahsd-serial="{{ahsd.sn_number}}">
+                    <div class="input-group">
+
+                      <div class="input-group-prepend">
+                        <span class="input-group-text py-1">
+                          <i class="mdi mdi-calendar mdi-18px m-0 p-0"></i>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control date-picker" readonly aria-label="date-picker"
+                        aria-describedby="date-picker">
+
+                      <div class="input-group-prepend">
+                        <span class="input-group-text py-1">
+                          <i class="mdi mdi-clock mdi-18px m-0 p-0"></i>
+                        </span>
+                      </div>
+                      <select class=" form-control text-light time-picker time-start">
+                        <option value="00:00" data-idx="0" selected>00:00</option>
+                        <option value="01:00" data-idx="1">01:00</option>
+                        <option value="02:00" data-idx="2">02:00</option>
+                        <option value="03:00" data-idx="3">03:00</option>
+                        <option value="04:00" data-idx="4">04:00</option>
+                        <option value="05:00" data-idx="5">05:00</option>
+                        <option value="06:00" data-idx="6">06:00</option>
+                        <option value="07:00" data-idx="7">07:00</option>
+                        <option value="08:00" data-idx="8">08:00</option>
+                        <option value="09:00" data-idx="9">09:00</option>
+                        <option value="10:00" data-idx="10">10:00</option>
+                        <option value="11:00" data-idx="11">11:00</option>
+                        <option value="12:00" data-idx="12">12:00</option>
+                        <option value="13:00" data-idx="13">13:00</option>
+                        <option value="14:00" data-idx="14">14:00</option>
+                        <option value="15:00" data-idx="15">15:00</option>
+                        <option value="16:00" data-idx="16">16:00</option>
+                        <option value="17:00" data-idx="17">17:00</option>
+                        <option value="18:00" data-idx="18">18:00</option>
+                        <option value="19:00" data-idx="19">19:00</option>
+                        <option value="20:00" data-idx="20">20:00</option>
+                        <option value="21:00" data-idx="21">21:00</option>
+                        <option value="22:00" data-idx="22">22:00</option>
+                        <option value="23:00" data-idx="23">23:00</option>
+                        <option class="start-time-custom" style="display: none;"></option>
+                      </select>
+
+                      <div class="input-group-prepend">
+                        <span class="input-group-text py-1">
+                          Đến
+                        </span>
+                      </div>
+                      <select class=" form-control text-light time-picker time-end">
+                        <option value="01:00" data-idx="1">01:00</option>
+                        <option value="02:00" data-idx="2">02:00</option>
+                        <option value="03:00" data-idx="3">03:00</option>
+                        <option value="04:00" data-idx="4">04:00</option>
+                        <option value="05:00" data-idx="5">05:00</option>
+                        <option value="06:00" data-idx="6">06:00</option>
+                        <option value="07:00" data-idx="7">07:00</option>
+                        <option value="08:00" data-idx="8">08:00</option>
+                        <option value="09:00" data-idx="9">09:00</option>
+                        <option value="10:00" data-idx="10">10:00</option>
+                        <option value="11:00" data-idx="11">11:00</option>
+                        <option value="12:00" data-idx="12">12:00</option>
+                        <option value="13:00" data-idx="13">13:00</option>
+                        <option value="14:00" data-idx="14">14:00</option>
+                        <option value="15:00" data-idx="15">15:00</option>
+                        <option value="16:00" data-idx="16">16:00</option>
+                        <option value="17:00" data-idx="17">17:00</option>
+                        <option value="18:00" data-idx="18">18:00</option>
+                        <option value="19:00" data-idx="19">19:00</option>
+                        <option value="20:00" data-idx="20">20:00</option>
+                        <option value="21:00" data-idx="21">21:00</option>
+                        <option value="22:00" data-idx="22">22:00</option>
+                        <option value="23:00" data-idx="23">23:00</option>
+                        <option value="23:59" data-idx="24" selected>24:00</option>
+                        <option class="end-time-custom" style="display: none;"></option>
+                      </select>
+
+                    </div>
+                  </div>
+                  {{!-- uom group --}}
+                  <div class="col-lg-12 p-0 group-uom">
+                    {{#each ahsd.device_type.uom_values as |uom|}}
+                    <div class="card rounded-lg p-2 mt-2 ahsd-uom {{@key}}" id="uom-{{ahsd.sn_number}}-{{@key}}"
+                      style=" background-color:{{uom.color}};" data-uom-key="{{@key}}"
+                      data-ahsd-serial="{{ahsd.sn_number}}" data-uom-label="{{uom.name}}"
+                      data-uom-color="{{uom.color}}">
+                      <h6 class="text-light font-weight-normal">{{uom.name}}</h6>
+                      <div class="card-body p-2">
+                        <div class="row">
+                          <div class="col-9 uom-value">
+                            <div class="d-flex align-items-center align-self-start">
+                              <h3 class="mb-0 value pr-2">N/A</h3>
+                            </div>
+                          </div>
+                          <div class="col-3">
+                            <div class="icon pt-1 pr-2">
+                              <i class="mb-0 uom">{{uom.uom}}</i>
+                            </div>
+                          </div>
+                        </div>
+                        <br>
+                      </div>
+                    </div>
+                    {{/each}}
+                  </div>
+
+                  {{!-- chart area --}}
+                  <div class="col-lg-12 p-0 chart-area" style="display: none;">
+                    <div class="row p-0">
+
+                      <div class="col-lg-12 input-group pt-3 d-flex justify-content-end mt-3 mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text py-1">
+                            Thời gian
+                          </span>
+                        </div>
+                        <div class="btn-group" role="group">
+                          <button type="button" class="btn time-range-btn" data-time="3"
+                            style="border: solid .5px #016343;color:#016343;"><span
+                              class="text-light">03h</span></button>
+                          <button type="button" class="btn time-range-btn" data-time="6"
+                            style="border: solid .5px #016343;color:#016343;"><span
+                              class="text-light">06h</span></button>
+                          <button type="button" class="btn time-range-btn" data-time="9"
+                            style="border: solid .5px #016343;color:#016343;"><span
+                              class="text-light">09h</span></button>
+                          <button type="button" class="btn time-range-btn" data-time="12"
+                            style="border: solid .5px #016343;color:#016343;"><span
+                              class="text-light">12h</span></button>
+                          <button type="button" class="btn time-range-btn" data-time="24"
+                            style="border: solid .5px #016343;color:#016343;"><span
+                              class="text-light">24h</span></button>
+                        </div>
+                      </div>
+                      <div class="col-lg-12">
+                        <canvas width="100%" class="chart-canvas" id="chart-{{ahsd.sn_number}}"></canvas>
+                        <br>
+                        <button class="btn btn-success reset-zoom-chart" data-id-chart="chart-{{ahsd.sn_number}}">Reset zoom</button></br>
+                                <i style="font-size: .8rem;">(*Ấn Ctrl + con lăn chuột để zoom biểu đồ)</i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {{/ahsdList}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:../../partials/_footer.html -->
+      {{>_footer}}
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+</div>
+{{!-- export modal --}}
+<div class="modal" tabindex="-1" role="dialog" id="exportModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body p-0">
+
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Xuất dữ liệu</h4>
+            <form class="forms-sample">
+
+              <div class="form-group">
+                <label for="groupList">Khoảng thời gian</label>
+                <input readonly type="text" class="form-control text-light" id="exportTimeRange" data-start-time="00:00"
+                  data-end-time="23:59">
+              </div>
+
+              <button type="button" class="btn btn-primary mr-2" id="exportSubmitBtn">Xuất</button>
+              <button type="button" class="btn btn-dark" data-dismiss="modal" id="exportCancelBtn">Đóng</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="text" id="date-picker" hidden>
+{{#section 'script'}}
+<script src="/socket.io/socket.io.js"></script>
+<script src="/assets/vendors/chart.js/chart.min.js"></script>
+<script src="/assets/vendors/chart.js/chartjs-adapter-date-fns.bundle.min.js"></script>
+<script src="/assets/vendors/chart.js/hammerjs@2.0.8.js"></script>
+<script src="/assets/vendors/chart.js/chartjs-plugin-zoom.js"></script>
+<script src="/assets/vendors/lightpick/lightpick.js"></script>
+<script type="text/javascript" src="/assets/vendors/js/FileSaver.min.js"></script>
+<script type="text/javascript" src="/assets/vendors/exceljs/dist/exceljs.min.js"></script>
+<script src="/assets/js/device_value_ahsd.js"></script>
+{{/section}}
+
+{{#section 'css'}}
+<link rel="stylesheet" href="/assets/vendors/lightpick/lightpick.css">
+<link rel="stylesheet" href="/assets/css/device_value_ahsd.css">
+{{/section}}

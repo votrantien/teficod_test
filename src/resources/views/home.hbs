@@ -1,0 +1,403 @@
+<div class="container-scroller">
+  <!-- partial:../../partials/_sidebar.html -->
+  {{>_sidebar}}
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:../../partials/_navbar.html -->
+    {{>_navbar}}
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="row">
+          {{!-- user info --}}
+          <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4>Thông tin người dùng</h4>
+                <div class="row p-3">
+                  <div class="col-lg-6 d-flex justify-content-center align-items-center">
+                    <img src="/assets/images/faces-clipart/ava.png" class="img-lg rounded " alt="umage"
+                      style="width: 150px;height:150px;">
+                  </div>
+                  <div class="col-lg-6">
+                    <p class="text-light d-flex justify-content-between"><span>Tên tài khoản:
+                      </span><span>{{user.username}}</span></p>
+                    <p class="text-light d-flex justify-content-between"><span>Họ tên:
+                      </span><span>{{user.fullname}}</span></p>
+                    <p class="text-light d-flex justify-content-between"><span>SĐT liên hệ:
+                      </span><span>{{user.phone}}</span></p>
+                    <p class="text-light d-flex justify-content-between"><span>Tình trạng: </span>
+                      <span>
+                        {{#if_ user.status '==' '1'}}
+                        Đang hoạt động
+                        {{else}}
+                        Khoá
+                        {{/if_}}
+                      </span>
+                    </p>
+                    <p class="text-light d-flex justify-content-between"><span>Số nông trại:
+                      </span><span>{{groupDevices.length}}</span></p>
+                    <p class="text-light d-flex justify-content-between"><span>Ngày tạo TK:
+                      </span><span>{{userCreateDate}}</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{!-- device activity log --}}
+          <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4>Log hoạt động thiết bị {{toDay}}</h4>
+                <div class="border p-2 activity-log-container" id="activityLogContainer">
+                  {{#each deviceActivityLog as |log|}}
+                  <p class="a-{{log.activity}}">
+                    <span class="font-weight-bold text-light">{{dateFormat log.createdAt format='HH:mm'}}</span>: Thiết
+                    bị
+                    <span class="text-light">{{log.devices.device_name}}</span> -
+                    <span class="text-light"> {{log.group.group_name}} </span>
+                    <span>{{log.description}}</span>
+                  </p>
+                  {{/each}}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="col-lg-12 p-0" id="TabList">
+                  <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item col-6 m-0 p-0 d-flex">
+                      <a class="nav-link bg-device active w-100" id="tabLinkGroup" data-toggle="tab" href="#groupContainer"
+                        role="tab" aria-controls="group" aria-selected="true">Danh sách nông trại</a>
+                    </li>
+                    <li class="nav-item col-6 m-0 p-0 d-flex">
+                      <a class="nav-link bg-device w-100" id="tabLinkActivity" data-toggle="tab" href="#activityLog"
+                        role="tab" aria-controls="activity" aria-selected="false">Lịch sử hoạt động</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="tab-content col-lg-12" id="tabContent">
+                  <div class="tab-pane fade active show" id="groupContainer" role="tabpanel"
+                    aria-labelledby="groupContainer">
+                    <div class="table-responsive">
+                      <table class="table table-hover table-contextual" id="groupTable">
+                        <thead>
+                          <tr>
+                            <th>Tên farm</th>
+                            <th>User quản lý</th>
+                            <th>Mô tả</th>
+                            <th>Vai trò</th>
+                            <th>Chức năng</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {{#groupDevices as |group|}}
+                          <tr class="group-item" id="g-{{group._id}}">
+                            <td class="group-name">{{group.group_name}}</td>
+                            <td>{{group.manage_user}}</td>
+                            <td class="group-desc">{{group.description}}</td>
+                            <td>Manager</td>
+                            <td>
+                              <button data-gid="{{group._id}}" class="btn mdi mdi-pencil-box-outline mdi-24px edit-group-btn" title="Sửa thông tin farm"></button>
+                            </td>
+                          </tr>
+                          {{/groupDevices}}
+                          {{#groupShare as |group|}}
+                          <tr class="group-item" id="g-{{group._id}}">
+                            <td class="group-name">{{group.group_name}}</td>
+                            <td>{{group.manage_user}}</td>
+                            <td class="group-desc">{{group.description}}</td>
+                            <td>Supporter</td>
+                            <td>
+                              ...
+                            </td>
+                          </tr>
+                          {{/groupShare}}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div id="paginationContainer">
+
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="activityLog" role="tabpanel" aria-labelledby="activityLog">
+                    <div class="d-flex align-items-end">
+                      <div class="col-lg-3 p-0 pr-2">
+                        <label for="getLogTimeRange">Thời gian</label>
+                        <input readonly type="text" class="form-control btn text-left text-light bg-dark p-2"
+                          id="getLogTimeRange" data-start-time="00:00" data-end-time="23:59">
+                      </div>
+                      <div class="col-lg-4 p-0 pr-2">
+                        <label for="groupList">Farm</label>
+                        <select class="form-control text-light p-2" id="groupList">
+                          {{#groupDevices as |group|}}
+                          <option value="{{group._id}}">{{group.group_name}}</option>
+                          {{/groupDevices}}
+                          <option disabled>Farm được chia sẽ</option>
+                          {{#groupShare as |group|}}
+                          <option value="{{group._id}}">{{group.group_name}}</option>
+                          {{/groupShare}}
+                        </select>
+                      </div>
+                      <div class="p-0 pr-2">
+                        <button class="btn btn-success" id="findLog" style="padding: 10px;">Tìm</button>
+                      </div>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table table-hover table-contextual" id="logTable">
+                        <thead>
+                          <tr>
+                            <th>Thời gian</th>
+                            <th>Serial</th>
+                            <th>Tên</th>
+                            <th>Farm</th>
+                            <th>Hoạt động</th>
+                            <th>Mô tả</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {{#deviceActivityLog as |log|}}
+                          <tr class="log-item a-{{log.activity}}" id="l-{{log._id}}">
+                            <td>{{dateFormat log.createdAt format='HH:mm
+                              DD-MM-YYYY'}}</td>
+                            <td>{{log.device_serial}}</td>
+                            <td>{{log.devices.device_name}}</td>
+                            <td>{{log.group.group_name}}</td>
+                            <td>{{log.activity}}</td>
+                            <td>{{log.description}}</td>
+                          </tr>
+                          {{/deviceActivityLog}}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div id="LogPaginationContainer">
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          {{>_footer}}
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- modal edit group info--}}
+<div class="modal" tabindex="-1" role="dialog" id="editModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body p-0">
+
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Sửa thông tin farm</h4>
+            <form class="forms-sample">
+
+              <div class="form-group">
+                <label for="editInputGroupName">Tên farm</label>
+                <p class="text-danger err-msg" id="editInputGroupNameErr"></p>
+                <input type="text" class="form-control" id="editInputGroupName" placeholder="Tên farm">
+              </div>
+              <div class="form-group">
+                <label for="editInputGroupDesc">Mô tả</label>
+                <p class="text-danger err-msg" id="editInputGroupDescErr"></p>
+                <input type="text" class="form-control" id="editInputGroupDesc" placeholder="Mô tả farm">
+              </div>
+
+              <button type="button" class="btn btn-primary mr-2" id="editSubmitBtn">Thay đổi</button>
+              <button type="button" class="btn btn-dark" data-dismiss="modal" id="editCancelBtn">Đóng</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#section 'script'}}
+<script src="/socket.io/socket.io.js"></script>
+<script src="/assets/vendors/lightpick/lightpick.js"></script>
+<script>
+  $(document).ready(function () {
+    //$('#activityLogContainer').scrollTop($('#activityLogContainer')[0].scrollHeight);
+    //pagination farm table
+    $('#paginationContainer').RenderPaginationControl({
+      showItemQty: 5,
+      itemQty: CountItem('groupTable', 'group-item'),
+      idTable: 'groupTable',
+      trClass: 'group-item'
+    });
+
+    //paginnation log table
+    $('#LogPaginationContainer').RenderPaginationControl({
+      showItemQty: 10,
+      itemQty: CountItem('logTable', 'log-item'),
+      idTable: 'logTable',
+      trClass: 'log-item'
+    });
+
+  })
+
+  // Range picker
+  var rangePicker = new Lightpick({
+    field: document.getElementById('getLogTimeRange'),
+    singleDate: false,
+    autoclose: true,
+    maxDays: 30,
+    format: 'DD-MM-YYYY',
+    separator: ' ~ ',
+    maxDate: new Date(),
+    onClose: function () {
+      console.log(1)
+    }
+  });
+  rangePicker.setDateRange(new Date(), new Date());
+
+  //find log
+  $('#findLog').on('click', function () {
+    var groupId = $('#groupList').val();
+    var dateExport = $('#getLogTimeRange').val().split(' ~ ');
+    var startDate = dateExport[0] + ' ' + $('#getLogTimeRange').data('startTime');
+    var endDate = dateExport[1] + ' ' + $('#getLogTimeRange').data('endTime');
+
+    var dateFormat = "DD-MM-YYYY HH:mm";
+    var chkDate = moment(startDate, dateFormat, true).isValid() && moment(endDate, dateFormat, true).isValid();
+    if (!chkDate) {
+      showDangerToast('Thất bại', 'Vui lòng kiểm tra lại khoảng thời gian !');
+      return;
+    }
+
+    var method = 'POST';
+    var url = '/device/device-activity-logs/';
+    var data = {
+      startDate: startDate,
+      endDate: endDate,
+      groupId: groupId
+    };
+    $('#mask').show();
+
+    var activityLogDevice = CallApi(url, data, method).then((response) => {
+      var status = response.status;
+      if (status == 'success') {
+        var activityLogs = response.deviceActivityLog;
+        $('#logTable tbody').html('');
+        var html = ''
+        activityLogs.forEach(function (log) {
+          var logTime = moment(log.createdAt).format('HH:mm DD-MM-YYYY');
+          html += `<tr class="log-item a-${log.activity}" id="l-${log._id}">
+                        <td>${logTime}</td>
+                        <td>${log.device_serial}</td>
+                        <td>${log.devices.device_name}</td>
+                        <td>${log.group.group_name}</td>
+                        <td>${log.activity}</td>
+                        <td>${log.description}</td>
+                      </tr>`;
+        });
+        $('#logTable tbody').html(html);
+
+        $('#LogPaginationContainer').RenderPaginationControl({
+          showItemQty: 10,
+          itemQty: CountItem('logTable', 'log-item'),
+          idTable: 'logTable',
+          trClass: 'log-item'
+        });
+        
+        $('#mask').hide();
+      } else {
+        $('#mask').hide();
+        showDangerToast('Thất bại', response.errors[0].msg);
+      }
+    }).catch((err) => {
+      $('#mask').hide();
+      console.log(err);
+      showDangerToast('Thất bại', err);
+    }).finally(() => {
+      $('#mask').hide();
+    })
+  })
+
+//Edit device
+    var editConstraints = {
+      editInputGroupName: {
+        presence: { allowEmpty: false, message: 'Tên farm không được để trống' },
+        length: { minimum: 5, maximum: 30, message: 'Tên farm phải từ 5 đến 30 ký tự' },
+      }
+    };
+
+    $(document).on('click', '.edit-group-btn', function () {
+      var groupId = $(this).data("gid");
+      var groupName = $('#g-'+groupId+' .group-name').text();
+      var groupDesc = $('#g-'+groupId+' .group-desc').text();
+      $('#editInputGroupName').val(groupName);
+      $('#editInputGroupDesc').val(groupDesc);
+      $('#editSubmitBtn').data('gid',groupId);
+      $('#editModal').modal('show');
+    })
+
+    $('#editSubmitBtn').on('click', function () {
+      var gid = $(this).data('gid');
+      var idRow = '#g-' + gid;
+      var groupNameElem = $(idRow + ' .group-name');
+      var groupDescElem = $(idRow + ' .group-desc');
+      var editInputGroupName = $('#editInputGroupName').val().trim();
+      var editInputGroupDesc = $('#editInputGroupDesc').val();
+
+      var validation = validate({ editInputGroupName }, editConstraints, { fullMessages: false });
+      $('.err-msg').html('');
+
+      if (validation) {
+        Object.keys(validation).forEach(key => {
+          var errMsgId = '#' + key + 'Err';
+          $(errMsgId).html(validation[key][0]);
+        });
+        return;
+      }
+
+      var url = '/device-group/update/' + gid;
+      var data = {
+        groupName: editInputGroupName,
+        groupDesc: editInputGroupDesc
+      };
+      var method = 'PUT';
+      $('#mask').show();
+
+      var updateDevice = CallApi(url, data, method).then((response) => {
+        var status = response.status;
+        if (status == 'success') {
+          groupNameElem.html(editInputGroupName);
+          groupDescElem.html(editInputGroupDesc);
+          $('#mask').hide();
+          $('#editModal').modal('hide');
+          showSuccessToast('Thành công', 'Sửa thông tin farm thành công !');
+        } else {
+          $('#mask').hide();
+          showDangerToast('Thất bại', response.errors[0].msg);
+        }
+      }).catch((err) => {
+        $('#mask').hide();
+        showDangerToast('Thất bại', 'Sửa thông tin farm không thành công');
+      }).finally(() => {
+        $('#mask').hide();
+      })
+    });
+
+</script>
+{{/section}}
+{{#section 'css'}}
+<link rel="stylesheet" href="/assets/vendors/lightpick/lightpick.css">
+{{/section}}

@@ -1,0 +1,317 @@
+<div class="container-scroller">
+  <!-- partial:../../partials/_sidebar.html -->
+  {{>_sidebar}}
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:../../partials/_navbar.html -->
+    {{>_navbar}}
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <h4>Thông tin người dùng</h4>
+
+        <div class="row">
+          {{!-- user info --}}
+          <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex flex-row justify-content-center align-items-center">
+                  <img src="/assets/images/faces-clipart/ava.png" class="img-lg rounded " alt="umage"
+                    style="width: 150px;height:150px;">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                  <div class="w-100">
+
+                    <p class="text-light d-flex justify-content-between"><span>Tên tài khoản:
+                      </span><span id="userName">{{user.username}}</span></p>
+                    <p class="text-light d-flex justify-content-between"><span>Họ tên:
+                      </span><span id="fullName">{{user.fullname}}</span></p>
+                    <p class="text-light d-flex justify-content-between"><span>SĐT liên hệ:
+                      </span><span id="phone">{{user.phone}}</span></p>
+                    <p class="text-light d-flex justify-content-between"><span>Email:
+                      </span><span id="email">{{user.email}}</span></p>
+                    <p class="text-light d-flex justify-content-between"><span>Tình trạng: </span>
+                      <span>
+                        {{#if_ user.status '==' '1'}}
+                        Đang hoạt động
+                        {{else}}
+                        Khoá
+                        {{/if_}}
+                      </span>
+                    </p>
+                    <p class="text-light d-flex justify-content-between"><span>Ngày tạo TK:
+                      </span><span>{{userCreateDate}}</span></p>
+                    <div class="d-flex justify-content-end">
+                      <button id="changeInfoBtn" class="btn btn-success m-1" data-uid="{{user._id}}">Đổi thông
+                        tin</button>
+                      <button id="changePasswordBtn" class="btn btn-info m-1" data-uid="{{user._id}}">Đổi mật
+                        khẩu</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:../../partials/_footer.html -->
+      {{>_footer}}
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+</div>
+{{!-- change info modal --}}
+<div class="modal" tabindex="-1" role="dialog" id="changeInfoModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body p-0">
+
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Đổi thông tin người dùng</h4>
+            <div class="form-group">
+              <label for="editInputFullName">Tên</label>
+              <p class="text-danger err-msg" id="editInputFullNameErr"></p>
+              <input type="text" class="form-control" id="editInputFullName" placeholder="Tên đầy đủ">
+            </div>
+
+            <div class="form-group">
+              <label for="editInputPhone">Số điện thoại</label>
+              <p class="text-danger err-msg" id="editInputPhoneErr"></p>
+              <input type="text" class="form-control" id="editInputPhone" placeholder="Số điện thoại">
+            </div>
+
+            <div class="form-group">
+              <label for="editInputEmail">Email</label>
+              <p class="text-danger err-msg" id="editInputEmailErr"></p>
+              <input type="text" class="form-control" id="editInputEmail" placeholder="Email">
+            </div>
+
+            {{!-- <div class="form-group">
+              <label for="authPassword">Mật khẩu hiện tại</label>
+              <input type="text" class="form-control password-field" id="authPassword">
+            </div> --}}
+            <br>
+            <button type="button" class="btn btn-primary mr-2" id="changeInfoModalSubmit">Thay đổi</button>
+            <button type="button" class="btn btn-dark" data-dismiss="modal" id="changeInfoModalCancel">Đóng</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- change password modal --}}
+<div class="modal" tabindex="-1" role="dialog" id="changePasswordModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body p-0">
+
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Đổi mật khẩu</h4>
+            <div class="form-group">
+              <label for="currentPassword">Mật khẩu hiện tại</label>
+              <p class="text-danger err-msg" id="currentPasswordErr"></p>
+              <input type="text" class="form-control password-field" id="currentPassword">
+            </div>
+            <hr class="bg-light">
+            <div class="form-group">
+              <label for="newPassword">Mật khẩu mới</label>
+              <p class="text-danger err-msg" id="newPasswordErr"></p>
+              <input type="text" class="form-control password-field" id="newPassword">
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Xác nhận mật khẩu mới</label>
+              <p class="text-danger err-msg" id="confirmPasswordErr"></p>
+              <input type="text" class="form-control password-field" id="confirmPassword">
+            </div>
+
+            <br>
+            <button type="button" class="btn btn-primary mr-2" id="changePasswordModalSubmit">Thay đổi</button>
+            <button type="button" class="btn btn-dark" data-dismiss="modal" id="changePasswordModalCancel">Đóng</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  //change info
+  $('#changeInfoBtn').on('click', function () {
+    var uid = $(this).data('uid');
+    var currFullName = $('#fullName').text();
+    var currEmail = $('#email').text();
+    var currPhone = $('#phone').text();
+    var userName = $('#userName').text();
+
+    $('#editInputFullName').val(currFullName);
+    $('#editInputEmail').val(currEmail);
+    $('#editInputPhone').val(currPhone);
+
+    $('#changeInfoModalSubmit').data('uid', uid);
+    $('.err-msg').html('');
+    $('#changeInfoModal').modal('show');
+  })
+
+  var editUserConstraints = {
+    editInputFullName: {
+      presence: { allowEmpty: false, message: 'Tên user không được để trống' },
+      length: { minimum: 6, maximum: 30, message: 'Tên user phải từ 6 đến 30 ký tự' },
+    },
+    editInputEmail: {
+      presence: { allowEmpty: false, message: 'Email không được để trống' },
+      email: { message: ": Sai định dạng email" }
+    },
+    editInputPhone: {
+      presence: { allowEmpty: false, message: 'Số điện thoại không được để trống' },
+      length: { minimum: 9, message: ': Số điện thoại phải từ 9 số' },
+      format: {
+        pattern: "[0-9]+",
+        flags: "i",
+        message: "Số điện thoại phải là số từ 0-9"
+      }
+    },
+  };
+
+  $('#changeInfoModalSubmit').on('click', async function () {
+
+
+    var editInputFullName = $('#editInputFullName').val().trim();
+    var editInputEmail = $('#editInputEmail').val().trim();
+    var editInputPhone = $('#editInputPhone').val().trim();
+    var uid = $(this).data('uid');
+
+    var validation = validate({ editInputFullName, editInputEmail, editInputPhone }, editUserConstraints, { fullMessages: false });
+    $('.err-msg').html('');
+
+    if (validation) {
+      Object.keys(validation).forEach(key => {
+        var errMsgId = '#' + key + 'Err';
+        $(errMsgId).html(validation[key][0]);
+        console.log($(this).data());
+      });
+      return;
+    }
+
+    var url = '/user/change-info/' + uid;
+    var method = 'PUT';
+    var data = {
+      email: editInputEmail,
+      fullname: editInputFullName,
+      phone: editInputPhone
+    };
+
+    $('#mask').show();
+    var addUser = await CallApi(url, data, method).then(function (res) {
+      var status = res.status;
+      if (status == 'success') {
+        //var user = res.userInfo;
+        $('#fullName').text(editInputFullName);
+        $('#phone').text(editInputPhone);
+        $('#email').text(editInputEmail);
+
+        $('#mask').hide();
+        $('#changeInfoModal').modal('hide');
+        showSuccessToast('Thành công', 'Sửa thông tin thành công !');
+      } else {
+        $('#mask').hide();
+        showDangerToast('Thất bại', response.errors[0].msg);
+      }
+    }).catch(function (err) {
+      $('#mask').hide();
+      showDangerToast('Thất bại', 'Sửa thông tin không thành công');
+    }).finally(function () {
+      $('#mask').hide();
+    })
+  })
+
+
+  //change password
+  var changePasswordConstraints = {
+    currentPassword: {
+      presence: { allowEmpty: false, message: 'Mật khẩu hiện tại không được để trống' },
+      length: { minimum: 6, maximum: 20, message: 'Mật khẩu hiện tại phải từ 5 đến 25 ký tự' },
+    },
+    newPassword: {
+      presence: { allowEmpty: false, message: 'Mật khẩu mới không được để trống' },
+      length: { minimum: 6, maximum: 20, message: 'Mật khẩu mới phải từ 5 đến 25 ký tự' },
+    },
+    confirmPassword: {
+      presence: { allowEmpty: false, message: 'Mật khẩu nhập lại không được để trống' },
+      length: { minimum: 6, maximum: 20, message: 'Mật khẩu nhập lại phải từ 5 đến 25 ký tự' },
+      equality: {
+        attribute: "newPassword",
+        message: "Mật khẩu nhập lại không chính xác"
+      },
+    }
+  };
+
+
+  $('#changePasswordBtn').on('click', function (e) {
+    var uid = $(this).data('uid');
+    $('#changePasswordModal input').val('');
+    $('#changePasswordModal .err-msg').html('');
+    $('#changePasswordModalSubmit').data('uid',uid);
+    $('#changePasswordModal').modal('show');
+  })
+
+  $('#changePasswordModalSubmit').on('click', async function () {
+    var uid = $(this).data('uid');
+    var currentPassword = $('#currentPassword').val().trim();
+    var newPassword = $('#newPassword').val().trim();
+    var confirmPassword = $('#confirmPassword').val().trim();
+
+    var validation = validate({ currentPassword, newPassword, confirmPassword }, changePasswordConstraints, { fullMessages: false });
+    $('.err-msg').html('');
+
+    if (validation) {
+      Object.keys(validation).forEach(key => {
+        var errMsgId = '#' + key + 'Err';
+        $(errMsgId).html(validation[key][0]);
+        console.log($(this).data());
+      });
+      return;
+    }
+
+    var url = '/user/change-password';
+    var method = 'PUT';
+    var data = {
+      old_password: currentPassword,
+      new_password: newPassword
+    };
+
+    $('#mask').show();
+    var changePassword = await CallApi(url, data, method).then(function (res) {
+      var status = res.status;
+      if (status == 'success') {
+        $('#mask').hide();
+        $('#changePasswordModal').modal('hide');
+        showSuccessToast('Thành công', 'Đổi mật khẩu thành công !');
+      } else {
+        $('#mask').hide();
+        $('#currentPassword').val('');
+        showDangerToast('Thất bại', res.errors[0].msg);
+      }
+    }).catch(function (err) {
+      $('#mask').hide();
+      showDangerToast('Thất bại', 'Đổi mật khẩu không thành công');
+    }).finally(function () {
+      $('#mask').hide();
+    })
+  });
+</script>
